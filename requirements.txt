@@ -1,0 +1,6 @@
+# Used to install all dependencies at once, when running on a new machine type:
+# pip install -r requirements.txt
+#
+# Check out the following page for an example of how to fill up this file:
+# https://pip.pypa.io/en/stable/reference/pip_install/#example-requirements-file
+Tkinter
