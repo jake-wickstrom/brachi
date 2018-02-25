@@ -9,7 +9,7 @@ line_ids = []
 line_segments = []
 
 master = Tk()
-master.title("drawing_window")
+master.title("drawing_lines")
 w = Canvas(master, width=c_width, height=c_height)
 w.pack(expand=YES, fill=BOTH)
 
@@ -36,14 +36,12 @@ def paint_line(event):
             line_id = w.create_line(points[-1][0], points[-1][1], event.x, event.y, fill=python_green, smooth=1, width=2.0)
             line_ids.append(line_id)
             points.append((event.x, event.y))
-        print points
 
 def track_segments(event):
     if len(line_segments) == 0:
         line_segments.append((0, len(line_ids) - 1))
     else:
         line_segments.append((line_segments[-1][1] + 1, len(line_ids) - 1))
-    print line_segments
 
 def undo_line(event):
     if len(line_segments) > 0:
@@ -54,8 +52,6 @@ def undo_line(event):
         del line_segments[-1]
         if len(points) == 1:
             del points[-1]
-    print points
-    print line_segments
 
 def event_in_bounds(event):
     if event.x >= bound and event.x <= c_width - bound and event.y >= bound and event.y <= c_height - bound:
