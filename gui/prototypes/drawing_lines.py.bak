@@ -1,4 +1,4 @@
-from tkinter import *
+from Tkinter import *
 
 bound = 20
 c_width = 500
@@ -45,7 +45,7 @@ def track_segments(event):
 
 def undo_line(event):
     if len(line_segments) > 0:
-        for i in range(line_segments[-1][1] + 1, line_segments[-1][0], -1):
+        for i in xrange(line_segments[-1][1] + 1, line_segments[-1][0], -1):
             w.delete(line_ids[-1])
             del line_ids[-1]
             del points[-1]

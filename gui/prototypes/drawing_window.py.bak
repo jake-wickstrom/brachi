@@ -1,4 +1,4 @@
-from tkinter import *
+from Tkinter import *
 
 c_width = 500
 c_height = 400

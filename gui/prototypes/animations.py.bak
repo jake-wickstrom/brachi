@@ -1,4 +1,4 @@
-from tkinter import *
+from Tkinter import *
 from math import *
 import time
 
@@ -98,13 +98,13 @@ def run_simulation():
 
         animate(delta_times, points_at_times)
     else:
-        print('cannot run')
+        print 'cannot run'
 
 def animate(t, p):
     time.sleep(t[0])
     ball = w.create_oval(p[0][0]-ball_radius, p[0][1]-ball_radius, p[0][0]+ball_radius, p[0][1]+ball_radius, fill="blue")
     w.update_idletasks()
-    for i in range(1, len(t)):
+    for i in xrange(1, len(t)):
         time.sleep(t[i])
         w.delete(ball)
         w.update_idletasks()
@@ -123,7 +123,7 @@ def track_segments(event):
 
 def undo_line():
     if len(line_segments) > 0:
-        for i in range(line_segments[-1][1] + 1, line_segments[-1][0], -1):
+        for i in xrange(line_segments[-1][1] + 1, line_segments[-1][0], -1):
             w.delete(line_ids[-1])
             del line_ids[-1]
             del points[-1]
