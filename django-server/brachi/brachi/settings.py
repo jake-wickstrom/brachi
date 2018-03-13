@@ -25,8 +25,8 @@ SECRET_KEY = ')x%nv68^h@-=jyag+8w+i4au9d-km+wg36hx-zvqih$^#3@#4q'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# TODO: Change this to whatever the local IP address of the server is
 ALLOWED_HOSTS = []
-
 
 # Application definition
 

@@ -1,7 +1,16 @@
 from django.shortcuts import render
-from django.http import HttpResponse
 
-# Create your views here.
+def title(request):
+    context = {}
+    return render(request, 'navigation/title.html', context)
 
-def index(request):
-    return HttpResponse("Hello world. ")
+def level_select(request):
+    context = {}
+    return render(request, 'navigation/title.html', context)
+
+def leaderboard(request):
+    context = {}
+    return render(request, 'navigation/title.html', context)
+
+def play(request):
+    pass
