@@ -1,0 +1,13 @@
+html {
+  min-width: 100%;
+  min-height: 100%;
+  background-position: top center;
+  background-color: #ffffff;
+}
+
+body {
+  width: 1054px;
+  height: 1054px;
+  //background-image: url(https://s3.amazonaws.com/spoonflower/public/design_thumbnails/0060/6297/rrrLined_paper_Yellow_Legal_shop_preview.jpg);
+  //background-repeat: no-repeat;
+}
