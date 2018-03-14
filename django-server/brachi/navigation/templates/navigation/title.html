@@ -1,0 +1,22 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <title>Brachi</title>
+  </head>
+  <body>
+    <h1>Brachi</h1>
+    <div>Enter a username:</div>
+    <table>
+      <tr>
+        <td><textarea id="username" autofocus cols="20" maxlength="20" rows="1"></textarea></td>
+        <td><div onclick="submitName()" style="background-color:black; text-align:center; vertical-align:middle; cursor:pointer; padding:10px; color:white; height:100%;">Submit</div></td>
+    </table>
+  <script>
+    function submitName() {
+      var username = document.getElementById('username').value.trim();
+      window.location.assign("/navigation/title/login?name=" + username);
+    }
+  </script>
+  </body>
+</html>
