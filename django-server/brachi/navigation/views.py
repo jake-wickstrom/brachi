@@ -3,7 +3,6 @@ from navigation.models import Player
 
 def title(request, invalid_name=False):
     context = {}
-    context['request'] = request # can be used in {{ request.get_host }} to get the host address
     context['invalid_name'] = invalid_name
     return render(request, 'navigation/title.html', context)
 

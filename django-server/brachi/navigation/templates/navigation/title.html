@@ -12,6 +12,9 @@
         <td><textarea id="username" autofocus cols="20" maxlength="20" rows="1"></textarea></td>
         <td><div onclick="submitName()" style="background-color:black; text-align:center; vertical-align:middle; cursor:pointer; padding:10px; color:white; height:100%;">Submit</div></td>
     </table>
+    {% if invalid_name %}
+      <div style="color:red;">The username you entered was invalid. Please try another name.</div>
+    {% endif %}
   <script>
     function submitName() {
       var username = document.getElementById('username').value.trim();
