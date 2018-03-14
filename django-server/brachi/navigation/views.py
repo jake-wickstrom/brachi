@@ -11,15 +11,13 @@ def login(request):
         try:
             name = request.GET['name']
             existing_names = Player.objects.values_list('name', flat=True)
-            print(existing_names)
             if name not in existing_names and name != "":
                 new_player = Player(name=name)
                 new_player.save()
                 # TODO: create session
                 return level_select(request)
         except Exception as e:
-            print(e)
-            pass
+            pass # must be an invalid input, just let the return below catch it
     # if anything about fails, come here
     return title(request, invalid_name=True)
 
