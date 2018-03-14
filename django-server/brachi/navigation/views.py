@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from navigation.models import Player
+from navigation.static import *
 
 def title(request, invalid_name=False):
     context = {}
@@ -24,12 +25,24 @@ def login(request):
 
 def level_select(request):
     context = {}
-    # TODO: update this, maybe find a better place to put a global constant
-    context['levels'] = ['Brachistochrone', 'Brachistochrone^2', 'Level 3']
+    context['levels'] = ALL_LEVELS
     return render(request, 'navigation/level_select.html', context)
 
 def leaderboard(request):
     context = {}
+    context['levels'] = ALL_LEVELS
+    context['leaderboards'] = [] # list of all leaderboards, each leaderboard is a list on tuples, (name, time)
+
+    # this next chunk of code is not ideal but I can't think of a better way
+    l1_players = Player.objects.order_by('time_l1').values_list('name', 'time_l1')
+    context['leaderboards'].append(l1_players)
+    l2_players = Player.objects.order_by('time_l2').values_list('name', 'time_l2')
+    context['leaderboards'].append(l2_players)
+    l3_players = Player.objects.order_by('time_l3').values_list('name', 'time_l3')
+    context['leaderboards'].append(l3_players)
+    if len(context['levels']) != len(context['leaderboards']):
+        print('***WARNING: mismatch between levels and leaderboards. Check django-server/brachi/navigation/views.py.')
+
     return render(request, 'navigation/leaderboard.html', context)
 
 def play(request):
@@ -39,4 +52,5 @@ def play(request):
     pass
 
 def project(request):
+    # TODO: a page decribing the project
     pass

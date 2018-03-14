@@ -4,6 +4,14 @@
   <head>
     <title>Brachi - Level Select</title>
   </head>
+  <script>
+    function gotoLevel(level_num) {
+      window.location.assign("/navigation/play?level=" + level_num);
+    }
+    function gotoLeaderboard() {
+      window.location.assign("/navigation/leaderboard");
+    }
+  </script>
   <body>
     <h1>Brachi - Level Select</h1>
     <table>
@@ -16,13 +24,5 @@
         <td><div onclick="gotoLeaderboard()" style="background-color:blue; text-align:center; vertical-align:middle; cursor:pointer; padding:10px; color:white; height:100%; margin:2px;">Leaderboard</div></td>
       </tr>
     </table>
-  <script>
-    function gotoLevel(level_num) {
-      window.location.assign("/navigation/play?level=" + level_num);
-    }
-    function gotoLeaderboard() {
-      window.location.assign("/navigation/leaderboard");
-    }
-  </script>
   </body>
 </html>

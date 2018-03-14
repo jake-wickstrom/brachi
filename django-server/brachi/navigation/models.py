@@ -7,10 +7,10 @@ Three steps to change stuff here:
 3. Run python manage.py migrate to apply those changes to the database.
 
 To clear the current database on your machine:
- >python manage.py flush
+ > python manage.py flush
 """
 
-# TODO: add best times for correct numeber of levels
+# TODO: add best times for correct number of levels
 class Player(models.Model):
     name = models.CharField(max_length=21)
     time_l1 = models.FloatField(default=999.9)
