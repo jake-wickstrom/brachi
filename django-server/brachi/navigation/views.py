@@ -2,6 +2,12 @@ from django.shortcuts import render
 from navigation.models import Player
 from navigation.static import *
 
+def checkValidSession(request):
+    if 'username' in request.session:
+        if request.session['username'] in Player.objects.values_list('name', flat=True):
+            return True
+    return False
+
 def title(request, invalid_name=False):
     context = {}
     context['invalid_name'] = invalid_name
@@ -15,20 +21,23 @@ def login(request):
             if name not in existing_names and name != "":
                 new_player = Player(name=name)
                 new_player.save()
-                # TODO: create session
+                request.session['username'] = name
                 return level_select(request)
-        except Exception as e:
-            print(e)
+        except:
             pass # must be an invalid input, just let the return below catch it
-    # if anything about fails, come here
+    # if anything above fails, come here
     return title(request, invalid_name=True)
 
 def level_select(request):
+    if checkValidSession(request) == False:
+        return title(request)
     context = {}
     context['levels'] = ALL_LEVELS
     return render(request, 'navigation/level_select.html', context)
 
 def leaderboard(request):
+    if checkValidSession(request) == False:
+        return title(request)
     context = {}
     context['levels'] = ALL_LEVELS
     context['leaderboards'] = [] # list of all leaderboards, each leaderboard is a list on tuples, (name, time)
@@ -46,11 +55,14 @@ def leaderboard(request):
     return render(request, 'navigation/leaderboard.html', context)
 
 def play(request):
+    if checkValidSession(request) == False:
+        return title(request)
     # TODO: process GET request and return appropriate level
     print(request.GET['level'])
     return level_select(request)
-    pass
 
 def project(request):
+    if checkValidSession(request) == False:
+        return title(request)
     # TODO: a page decribing the project
     pass
