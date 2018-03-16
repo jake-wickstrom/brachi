@@ -54,6 +54,7 @@ def leaderboard(request):
 
     return render(request, 'navigation/leaderboard.html', context)
 
+# TODO: don't forget to use current session when assigning times in the database
 def play(request):
     if checkValidSession(request) == False:
         return title(request)
@@ -64,5 +65,5 @@ def play(request):
 def project(request):
     if checkValidSession(request) == False:
         return title(request)
-    # TODO: a page decribing the project
-    pass
+    context = {}
+    return render(request, 'navigation/project.html', context)
