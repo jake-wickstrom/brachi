@@ -1,56 +1,175 @@
+const GRAV = 9.81;
+const DX = 1;
+const MARBLE_RADIUS = 5;
+const FILTER_INTERVAL = 20;
+
 var mouseDownFlag = false;
 var canvas = document.getElementById("simCanvas");
 var ctx = canvas.getContext("2d");
 
 var xpoints = [];
 var ypoints = [];
-var points = [];
-var pointsCounter = 0;
+
+var runAnimation = true;
+var marble;
+var finePath;
 
 $(document).ready(function() {
-  document.getElementById("undoButton").addEventListener("click", function() {
+  document.getElementById("resetButton").addEventListener("click", function() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    runAnimation = false;
+    xpoints = [];
+    ypoints = [];
+    marble.reset();
+    finePath.reset();
+  });
+
+  document.getElementById("startButton").addEventListener("click", function() {
+    runAnimation = true;
+  });
+
+  document.getElementById("backButton").addEventListener("click", function() {
+    // TODO: figure this out
   });
 });
 
-// inverts y-values such that y-axis points upwards in the GUI
-function invY(y0) {
-  return canvas.height - y0;
+function FinePath(xpath, ypath) {
+  this.xpath = xpath;
+  this.ypath = ypath;
+
+  this.draw = function() {
+    for (var i = 1; i < this.xpath.length; i++) {
+      connectPoints(this.xpath[i], this.ypath[i], this.xpath[i - 1], this.ypath[i - 1]);
+    }
+  }
+
+  this.reset = function() {
+    this.xpath = [];
+    this.ypath = [];
+  }
+}
+
+function Marble(xpath, ypath, pathTimes) {
+  this.xpath = xpath;
+  this.ypath = ypath;
+  this.pathTimes = pathTimes;
+  this.x = this.xpath[0];
+  this.y = this.ypath[0];
+  this.pathIndex = 0;
+
+  this.draw = function() {
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, MARBLE_RADIUS, 0, 2 * Math.PI);
+    ctx.fillStyle = "red";
+    ctx.fill();
+  }
+
+  this.update = function() {
+    this.pathIndex++;
+    this.x = this.xpath[this.pathIndex];
+    this.y = this.ypath[this.pathIndex];
+  }
+
+  this.wait = function() {
+    setTimeout(function() {}, this.pathTimes[this.pathIndex] * 1000);
+  }
+
+  this.reset = function() {
+    this.xpath = [];
+    this.ypath = []
+    this.pathTimes = [];
+  }
+}
+
+function simulate(path) {
+  var y0 = path.ypath[0];
+  var t = 0;
+  var times = [];
+  times.push(0);
+
+  for (var i = 1; i < path.ypath.length; i++) {
+    dy = Math.abs(path.ypath[i - 1] - path.ypath[i]);
+    dt = Math.sqrt((DX * DX + dy * dy) / (2 * GRAV * (Math.abs(y0 - path.ypath[i]))));
+    t += dt;
+    times.push(dt);
+  }
+
+  // console.log(xfine.length);
+  // console.log(yfine.length);
+  // console.log(times);
+  //finePath = new FinePath(xfine, yfine);
+  marble = new Marble(path.xpath, path.ypath, times);
+  marble.draw();
+  animate();
+}
+
+function animate() {
+  if (!runAnimation) {
+    return;
+  }
+  requestAnimationFrame(animate);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  finePath.draw();
+  marble.wait();
+  marble.draw();
+  marble.update();
+}
+
+function filterPoints(intv) {
+  var xfiltered = [];
+  var yfiltered = [];
+
+  for (var xf = xpoints[0]; xf < xpoints[xpoints.length - 1]; xf += intv) {
+    for (var i = 0; i < xpoints.length; i++) {
+      if ((xpoints[i] >= xf) && (xpoints[i] <= xf + intv)) {
+        xfiltered.push(xpoints[i]);
+        yfiltered.push(ypoints[i]);
+        break;
+      }
+    }
+  }
+
+  xfiltered.push(xpoints[xpoints.length - 1]);
+  yfiltered.push(ypoints[ypoints.length - 1]);
+  xpoints = xfiltered;
+  ypoints = yfiltered;
 }
 
 function getMouseLoc(event) {
   if (mouseDownFlag) {
     var x = event.clientX;
     var y = event.clientY;
-    xpoints[pointsCounter] = x;
-    ypoints[pointsCounter] = y;
-    points.push(x);
-    points.push(y);
-    //connectPoints(xpoints[pointsCounter - 1], ypoints[pointsCounter - 1], xpoints[pointsCounter], ypoints[pointsCounter]);
-    ctx.fillRect(x, y, 1, 1);
-    pointsCounter++;
+    xpoints.push(x);
+    ypoints.push(y);
+    ctx.fillStyle = "black";
+    ctx.fillRect(x, y, 2, 2);
+    console.log('drawing new point');
   }
 }
 
+
 function mouseDown(event) {
   mouseDownFlag = true;
-  var x = event.clientX;
-  var y = event.clientY;
-  points.push(x);
-  points.push(y);
-  xpoints[pointsCounter] = x;
-  ypoints[pointsCounter] = y;
-  pointsCounter++;
+  xpoints.push(event.clientX);
+  ypoints.push(event.clientY);
 }
 
 function mouseUp(event) {
   mouseDownFlag = false;
-  // var temp = spline(200, xpoints, ypoints);
-  // console.log(temp);
-  // connectPoints(xpoints[0], ypoints[0], 200, temp);
-  // connectPoints(200, temp, xpoints[pointsCounter - 1], ypoints[pointsCounter - 1]);
-  pointsCounter = 0;
-  drawSpline(ctx, points, 0.5, closed);
+  var xfine = [];
+  var yfine = [];
+  filterPoints(FILTER_INTERVAL);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+  for (var x = xpoints[0]; x < xpoints[xpoints.length - 1]; x += DX) {
+    var y = spline(x, xpoints, ypoints);
+    xfine.push(x);
+    yfine.push(y);
+  }
+
+  finePath = new FinePath(xfine, yfine);
+  finePath.draw();
+  simulate(finePath);
 }
 
 function connectPoints(x1, y1, x2, y2) {
@@ -60,114 +179,91 @@ function connectPoints(x1, y1, x2, y2) {
   ctx.stroke();
 }
 
+// Below code taken from https://github.com/morganherlocker/cubic-spline
 
-// Below code taken from http://scaledinnovation.com/analytics/splines/splines.html
-/*
-	Copyright 2010 by Robin W. Spencer
+function spline(x, xs, ys) {
+  var ks = xs.map(function() {
+    return 0
+  })
+  ks = getNaturalKs(xs, ys, ks)
+  var i = 1;
+  while (xs[i] < x) i++;
+  var t = (x - xs[i - 1]) / (xs[i] - xs[i - 1]);
+  var a = ks[i - 1] * (xs[i] - xs[i - 1]) - (ys[i] - ys[i - 1]);
+  var b = -ks[i] * (xs[i] - xs[i - 1]) + (ys[i] - ys[i - 1]);
+  var q = (1 - t) * ys[i - 1] + t * ys[i] + t * (1 - t) * (a * (1 - t) + b * t);
+  return q;
+}
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+function getNaturalKs(xs, ys, ks) {
+  var n = xs.length - 1;
+  var A = zerosMat(n + 1, n + 2);
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
+  for (var i = 1; i < n; i++) // rows
+  {
+    A[i][i - 1] = 1 / (xs[i] - xs[i - 1]);
+    A[i][i] = 2 * (1 / (xs[i] - xs[i - 1]) + 1 / (xs[i + 1] - xs[i]));
+    A[i][i + 1] = 1 / (xs[i + 1] - xs[i]);
+    A[i][n + 1] = 3 * ((ys[i] - ys[i - 1]) / ((xs[i] - xs[i - 1]) * (xs[i] - xs[i - 1])) + (ys[i + 1] - ys[i]) / ((xs[i + 1] - xs[i]) * (xs[i + 1] - xs[i])));
+  }
 
-    You can find a copy of the GNU General Public License
-    at http://www.gnu.org/licenses/.
+  A[0][0] = 2 / (xs[1] - xs[0]);
+  A[0][1] = 1 / (xs[1] - xs[0]);
+  A[0][n + 1] = 3 * (ys[1] - ys[0]) / ((xs[1] - xs[0]) * (xs[1] - xs[0]));
 
-*/
+  A[n][n - 1] = 1 / (xs[n] - xs[n - 1]);
+  A[n][n] = 2 / (xs[n] - xs[n - 1]);
+  A[n][n + 1] = 3 * (ys[n] - ys[n - 1]) / ((xs[n] - xs[n - 1]) * (xs[n] - xs[n - 1]));
 
-function drawSpline(ctx,pts,t,closed){
-    ctx.lineWidth=4;
-    ctx.save();
-    var cp=[];   // array of control points, as x0,y0,x1,y1,...
-    var n=pts.length;
+  return solve(A, ks);
+}
 
-    if(closed){
-        //   Append and prepend knots and control points to close the curve
-        pts.push(pts[0],pts[1],pts[2],pts[3]);
-        pts.unshift(pts[n-1]);
-        pts.unshift(pts[n-1]);
-        for(var i=0;i<n;i+=2){
-            cp=cp.concat(getControlPoints(pts[i],pts[i+1],pts[i+2],pts[i+3],pts[i+4],pts[i+5],t));
-        }
-        cp=cp.concat(cp[0],cp[1]);
-        for(var i=2;i<n+2;i+=2){
-            var color="#555555"
-            ctx.strokeStyle=hexToCanvasColor(color,0.75);
-            ctx.beginPath();
-            ctx.moveTo(pts[i],pts[i+1]);
-            ctx.bezierCurveTo(cp[2*i-2],cp[2*i-1],cp[2*i],cp[2*i+1],pts[i+2],pts[i+3]);
-            ctx.stroke();
-            ctx.closePath();
-        }
-    }else{
-        // Draw an open curve, not connected at the ends
-        for(var i=0;i<n-4;i+=2){
-            cp=cp.concat(getControlPoints(pts[i],pts[i+1],pts[i+2],pts[i+3],pts[i+4],pts[i+5],t));
-        }
-        for(var i=2;i<pts.length-5;i+=2){
-            var color="#555555"
-            ctx.strokeStyle=hexToCanvasColor(color,0.75);
-            ctx.beginPath();
-            ctx.moveTo(pts[i],pts[i+1]);
-            ctx.bezierCurveTo(cp[2*i-2],cp[2*i-1],cp[2*i],cp[2*i+1],pts[i+2],pts[i+3]);
-            ctx.stroke();
-            ctx.closePath();
-        }
-        //  For open curves the first and last arcs are simple quadratics.
-        var color="#555555"
-        ctx.strokeStyle=hexToCanvasColor(color,0.75);
-        ctx.beginPath();
-        ctx.moveTo(pts[0],pts[1]);
-        ctx.quadraticCurveTo(cp[0],cp[1],pts[2],pts[3]);
-        ctx.stroke();
-        ctx.closePath();
 
-        var color="#555555"
-        ctx.strokeStyle=hexToCanvasColor(color,0.75);
-        ctx.beginPath();
-        ctx.moveTo(pts[n-2],pts[n-1]);
-        ctx.quadraticCurveTo(cp[2*n-10],cp[2*n-9],pts[n-4],pts[n-3]);
-        ctx.stroke();
-        ctx.closePath();
+function solve(A, ks) {
+  var m = A.length;
+  for (var k = 0; k < m; k++) // column
+  {
+    // pivot for column
+    var i_max = 0;
+    var vali = Number.NEGATIVE_INFINITY;
+    for (var i = k; i < m; i++)
+      if (A[i][k] > vali) {
+        i_max = i;
+        vali = A[i][k];
+      }
+    swapRows(A, k, i_max);
+
+    // for all rows below pivot
+    for (var i = k + 1; i < m; i++) {
+      for (var j = k + 1; j < m + 1; j++)
+        A[i][j] = A[i][j] - A[k][j] * (A[i][k] / A[k][k]);
+      A[i][k] = 0;
     }
-    ctx.restore();
+  }
+  for (var i = m - 1; i >= 0; i--) // rows = columns
+  {
+    var v = A[i][m] / A[i][i];
+    ks[i] = v;
+    for (var j = i - 1; j >= 0; j--) // rows
+    {
+      A[j][m] -= A[j][i] * v;
+      A[j][i] = 0;
+    }
+  }
+  return ks;
 }
 
-function getControlPoints(x0,y0,x1,y1,x2,y2,t){
-    //  x0,y0,x1,y1 are the coordinates of the end (knot) pts of this segment
-    //  x2,y2 is the next knot -- not connected here but needed to calculate p2
-    //  p1 is the control point calculated here, from x1 back toward x0.
-    //  p2 is the next control point, calculated here and returned to become the
-    //  next segment's p1.
-    //  t is the 'tension' which controls how far the control points spread.
-
-    //  Scaling factors: distances from this knot to the previous and following knots.
-    var d01=Math.sqrt(Math.pow(x1-x0,2)+Math.pow(y1-y0,2));
-    var d12=Math.sqrt(Math.pow(x2-x1,2)+Math.pow(y2-y1,2));
-
-    var fa=t*d01/(d01+d12);
-    var fb=t-fa;
-
-    var p1x=x1+fa*(x0-x2);
-    var p1y=y1+fa*(y0-y2);
-
-    var p2x=x1-fb*(x0-x2);
-    var p2y=y1-fb*(y0-y2);
-
-    return [p1x,p1y,p2x,p2y]
+function zerosMat(r, c) {
+  var A = [];
+  for (var i = 0; i < r; i++) {
+    A.push([]);
+    for (var j = 0; j < c; j++) A[i].push(0);
+  }
+  return A;
 }
 
-function hexToCanvasColor(hexColor,opacity){
-    // Convert #AA77CC to rbga() format for Firefox
-    opacity=opacity || "1.0";
-    hexColor=hexColor.replace("#","");
-    var r=parseInt(hexColor.substring(0,2),16);
-    var g=parseInt(hexColor.substring(2,4),16);
-    var b=parseInt(hexColor.substring(4,6),16);
-    return "rgba("+r+","+g+","+b+","+opacity+")";
+function swapRows(m, k, l) {
+  var p = m[k];
+  m[k] = m[l];
+  m[l] = p;
 }
