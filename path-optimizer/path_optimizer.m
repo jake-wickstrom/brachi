@@ -1,7 +1,7 @@
 clear all;
 close all;
 hold on
-warning off %ode15i generates many warnings
+warning off %ode15i generates many warnings 
 
 %Good results can be found by starting with wide ranges and lower
 %resolution, noting where the best solution tends to be or if it is
