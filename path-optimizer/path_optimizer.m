@@ -26,12 +26,13 @@ yi = -yi; %janky reasons don't change
 %end point
 xf = 3;
 yf = 1.5;
-
+%NOTE: Avoid BCs that are vertical to each other as slope is used for curve fitting
 m = (yf-yi)/(xf-xi);
+
 tBest = inf;
 syms x(s) y(s) U(x, y) x2 y2
 
-%NOTE: When changing U it must also be manually changed in the time calculation below (line ~110)
+%NOTE: When changing U it must also be manually changed in the time calculation below (line ~111)
 
 % U = -1/sqrt(y^2+x^2)+1/sqrt(y^2+(x+0.5)^2)-1/sqrt((y-2)^2+x^2); %attractive charges at (0,0), (0,2), repulsive charge at (-0.5,0)
 % U2 = -1/sqrt(y2^2+x2^2)+1/sqrt(y2^2+(x2+0.5)^2)-1/sqrt((y2-2)^2+x2^2); %for contour plots
@@ -91,7 +92,7 @@ for theta = dydxStart:dydxInc:dydxEnd
         xsol = pt(:,1);
         ysol = pt(:,2);
         %find best fit to BCs (based on relative position of start and end points)
-        [~,fitIndex] = min( abs( (ysol(2:end)-yi)./(xsol(2:end)-xi)/m - 1 ) );
+        [~,fitIndex] = min( abs( (ysol(2:end)-yi)./(xsol(2:end)-xi)/1 - 1*m ) );
         xsol = xsol(1:fitIndex+1);
         if numel(xsol) < 2
             continue
