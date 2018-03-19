@@ -2,10 +2,15 @@ const GRAV = 9.81;
 const DX = 1;
 const MARBLE_RADIUS = 5;
 const FILTER_INTERVAL = 20;
+const CANVAS_WIDTH_SCALE = 1;
+const CANVAS_HEIGHT_SCALE = 0.8;
 
 var mouseDownFlag = false;
 var canvas = document.getElementById("simCanvas");
 var ctx = canvas.getContext("2d");
+
+canvas.width = $('#canvasCol').width();
+canvas.height = window.innerHeight * CANVAS_HEIGHT_SCALE;
 
 var xpoints = [];
 var ypoints = [];
@@ -15,6 +20,14 @@ var marble;
 var finePath;
 
 $(document).ready(function() {
+  window.addEventListener('mousemove', getMouseLoc);
+  window.addEventListener('mousedown', mouseDown);
+  window.addEventListener('mouseup', mouseUp);
+  window.addEventListener('resize', function() {
+    canvas.width = $('#canvasCol').width();
+    canvas.height = window.innerHeight * CANVAS_HEIGHT_SCALE;
+  });
+
   document.getElementById("resetButton").addEventListener("click", function() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     runAnimation = false;
@@ -26,6 +39,7 @@ $(document).ready(function() {
 
   document.getElementById("startButton").addEventListener("click", function() {
     runAnimation = true;
+    animate();
   });
 
   document.getElementById("backButton").addEventListener("click", function() {
@@ -94,13 +108,10 @@ function simulate(path) {
     times.push(dt);
   }
 
-  // console.log(xfine.length);
-  // console.log(yfine.length);
-  // console.log(times);
-  //finePath = new FinePath(xfine, yfine);
+  document.getElementById('info-display').innerHTML = "Your Time: " + t.toFixed(1) + " s";
+  console.log('Total time: ' + t);
   marble = new Marble(path.xpath, path.ypath, times);
   marble.draw();
-  animate();
 }
 
 function animate() {
@@ -137,21 +148,20 @@ function filterPoints(intv) {
 
 function getMouseLoc(event) {
   if (mouseDownFlag) {
-    var x = event.clientX;
-    var y = event.clientY;
+    var x = event.x;
+    var y = event.y;
     xpoints.push(x);
     ypoints.push(y);
     ctx.fillStyle = "black";
     ctx.fillRect(x, y, 2, 2);
-    console.log('drawing new point');
   }
 }
 
 
 function mouseDown(event) {
   mouseDownFlag = true;
-  xpoints.push(event.clientX);
-  ypoints.push(event.clientY);
+  xpoints.push(event.x);
+  ypoints.push(event.y);
 }
 
 function mouseUp(event) {

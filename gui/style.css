@@ -1,18 +1,54 @@
-#simCanvas {
-  //padding: 100px;
-  //margin: :1000px;
-}
-
-html {
-  min-width: 100%;
-  min-height: 100%;
-  background-position: top center;
-  background-color: #ffffff;
+canvas {
+  //border: 1px solid black;
+  background-image: url(http://jobsresumes.org/wp-content/uploads/2016/06/yellow-lined-paper-4.png);
+  background-size: 100% 100%;
 }
 
 body {
-  width: 1054px;
-  height: 1054px;
-  //background-image: url(https://s3.amazonaws.com/spoonflower/public/design_thumbnails/0060/6297/rrrLined_paper_Yellow_Legal_shop_preview.jpg);
-  //background-repeat: no-repeat;
+  background-image: url(https://img-new.cgtrader.com/items/101046/026436c913/office-workstation-design-3d-model-sldprt-sldasm-slddrw.jpg);
+  background-size: 100% 100%;
 }
+
+#canvasCol {
+  padding: 0px;
+}
+
+#info-display {
+  font-family: 'Indie Flower', cursive;
+  font-size: 25px;
+  //border: 1px solid black;
+  width: 30%;
+  padding: 5%;
+  margin-bottom: 20%;
+}
+
+#buttons {
+  margin-top: 10%;
+  margin-bottom: 10%;
+}
+
+#startButton {
+  font-family: 'Indie Flower', cursive;
+  font-size: 25px;
+  height: 100%;
+  width: 30%;
+  background-color: rgba(0, 0, 0, 0);
+  border: 0px;
+}
+
+#resetButton {
+  font-family: 'Indie Flower', cursive;
+  font-size: 25px;
+  height: 100%;
+  width: 30%;
+  background-color: rgba(0, 0, 0, 0);
+  border: 0px;
+}
+
+#backButton {
+  font-family: 'Indie Flower', cursive;
+  font-size: 25px;
+  height: 100%;
+  width: 30%;
+  background-color: rgba(0, 0, 0, 0);
+  border: 0px;
