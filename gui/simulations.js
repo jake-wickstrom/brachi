@@ -1,4 +1,5 @@
 const GRAV = 9.81;
+const M = 1;
 const DX = 1;
 const MARBLE_RADIUS = 5;
 const FILTER_INTERVAL = 20;
@@ -63,13 +64,15 @@ function FinePath(xpath, ypath) {
   }
 }
 
-function Marble(xpath, ypath, pathTimes) {
+function Marble(xpath, ypath, pathTimes, directions) {
   this.xpath = xpath;
   this.ypath = ypath;
   this.pathTimes = pathTimes;
+  this.directions = directions;
   this.x = this.xpath[0];
   this.y = this.ypath[0];
   this.pathIndex = 0;
+  var movingBackwards = false;
 
   this.draw = function() {
     ctx.beginPath();
@@ -79,38 +82,85 @@ function Marble(xpath, ypath, pathTimes) {
   }
 
   this.update = function() {
-    this.pathIndex++;
+    if ((this.directions[this.pathIndex] == 1) && !movingBackwards) {
+      this.pathIndex++;
+    } else if ((this.directions[this.pathIndex] == 0) && !movingBackwards) {
+      movingBackwards = true;
+      this.pathIndex--;
+    } else {
+      // check if marble has gone back to beginning of path
+      if(this.pathIndex > 0) {
+        this.pathIndex--;
+      } else {
+        movingBackwards = false;
+        this.pathIndex++;
+      }
+    }
     this.x = this.xpath[this.pathIndex];
     this.y = this.ypath[this.pathIndex];
   }
 
   this.wait = function() {
-    setTimeout(function() {}, this.pathTimes[this.pathIndex] * 1000);
+    //var t0 = new Date().getTime();
+    sleep(this.pathTimes[this.pathIndex] * 1000);
+    // var t1 = new Date().getTime();
+    // var dt = t1 - t0;
+    // var t = 0;
+    //
+    // for (var i = this.pathIndex; i < this.pathTimes.length; i++) {
+    //   t += pathTimes[i];
+    //   if (t >= (this.pathTimes[this.pathIndex] + dt)) {
+    //     this.pathIndex = i;
+    //     break;
+    //   }
+    // }
   }
 
   this.reset = function() {
     this.xpath = [];
     this.ypath = []
     this.pathTimes = [];
+    this.directions = [];
   }
 }
 
 function simulate(path) {
-  var y0 = path.ypath[0];
+  var v0 = 0;
   var t = 0;
   var times = [];
+  var directions = [];
+  var movingForward = true;
+  var u0 = M * GRAV * invY(path.ypath[0]);
   times.push(0);
+  directions.push(1);
 
   for (var i = 1; i < path.ypath.length; i++) {
-    dy = Math.abs(path.ypath[i - 1] - path.ypath[i]);
-    dt = Math.sqrt((DX * DX + dy * dy) / (2 * GRAV * (Math.abs(y0 - path.ypath[i]))));
-    t += dt;
+    var u = M * GRAV * invY(path.ypath[i]);
+    var dy = invY(path.ypath[i]) - invY(path.ypath[i - 1]);
+    var vSqr = (u0 - u + 0.5 * M * v0 * v0) * 2 / M;
+    var dt;
+
+    if (vSqr > 0) {
+      if (movingForward) {
+        directions.push(1);
+      } else {
+        directions.push(-1);
+      }
+
+      dt = Math.sqrt((DX * DX + dy * dy) / vSqr);
+    } else if (vSqr <= 0) {
+      directions.push(0);
+      movingForward = !movingForward;
+      dt = 0; //TODO: this might be wrong
+    }
+
     times.push(dt);
+    t += dt;
   }
 
   document.getElementById('info-display').innerHTML = "Your Time: " + t.toFixed(1) + " s";
-  console.log('Total time: ' + t);
-  marble = new Marble(path.xpath, path.ypath, times);
+  //console.log('Total time: ' + t);
+  marble = new Marble(path.xpath, path.ypath, times, directions);
   marble.draw();
 }
 
@@ -187,6 +237,20 @@ function connectPoints(x1, y1, x2, y2) {
   ctx.moveTo(x1, y1);
   ctx.lineTo(x2, y2);
   ctx.stroke();
+}
+
+// inverts y values such that direction of y-axis is flipped
+function invY(y) {
+  return canvas.height - y;
+}
+
+function sleep(milliseconds) {
+  var start = new Date().getTime();
+  while(true) {
+    if ((new Date().getTime() - start) > milliseconds) {
+      break;
+    }
+  }
 }
 
 // Below code taken from https://github.com/morganherlocker/cubic-spline
