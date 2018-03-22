@@ -15,14 +15,14 @@ canvas.height = window.innerHeight * CANVAS_HEIGHT_SCALE;
 var xpoints = [];
 var ypoints = [];
 
-var runAnimation = true;
+var runAnimation = false;
 var marble;
 var finePath;
 
 $(document).ready(function() {
-  window.addEventListener('mousemove', getMouseLoc);
-  window.addEventListener('mousedown', mouseDown);
-  window.addEventListener('mouseup', mouseUp);
+  document.getElementById('simCanvas').addEventListener('mousemove', getMouseLoc);
+  document.getElementById('simCanvas').addEventListener('mousedown', mouseDown);
+  document.getElementById('simCanvas').addEventListener('mouseup', mouseUp);
   window.addEventListener('resize', function() {
     canvas.width = $('#canvasCol').width();
     canvas.height = window.innerHeight * CANVAS_HEIGHT_SCALE;
