@@ -15,7 +15,7 @@ dydxInc = 2*pi/180;
 %IC scale range and resolution in powers of ten (too extreme causes problems)
 scales = 10.^linspace(-11,-10,11);
 %interpolation settings
-interpRes = 1e3; %reduce if getting odd loops/zig-zags
+interpRes = 1e2; %reduce if getting odd loops/zig-zags
 interpMode = 'linear'; %pchip is better, but much slower than linear
 %initial KE, setting exactly to 0 causes division by 0 in DEs
 Tinit = 1e-3;
@@ -92,7 +92,7 @@ for theta = dydxStart:dydxInc:dydxEnd
         xsol = pt(:,1);
         ysol = pt(:,2);
         %find best fit to BCs (based on relative position of start and end points)
-        [~,fitIndex] = min( abs( (ysol(2:end)-yi)./(xsol(2:end)-xi)/1 - 1*m ) );
+        [~,fitIndex] = min( abs( (ysol(2:end)-yi)./(xsol(2:end)-xi) - m ) );
         xsol = xsol(1:fitIndex+1);
         if numel(xsol) < 2
             continue
@@ -129,6 +129,8 @@ for theta = dydxStart:dydxInc:dydxEnd
     end
 end
 
-plot(xsolBest, ysolBest, '.')
+plot(xsolBest, ysolBest, '.b')
+plot([xi xf], [yi yf], 'ob')
 fcontour(U2, [-1.5, 2.5, -1, 2.5])
+csvwrite('trajectory.csv',[xsolBest ysolBest])
 warning on
