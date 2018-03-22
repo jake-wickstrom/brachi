@@ -5,30 +5,29 @@ warning off %ode15i generates many warnings
 
 %Good results can be found by starting with wide ranges and lower
 %resolution, noting where the best solution tends to be or if it is
-%railing, and narrowing search focus accordingly. In some cases 
+%railing, and narrowing search focus accordingly.
 
 %IC angle range
-dydxStart = 0;
-dydxEnd = pi;
+dydxStart = 2*pi*0;
+dydxEnd =   2*pi*1;
 %IC angle resolution
-dydxInc = 2*pi/180;
+dydxInc = 2*pi/90;
 %IC scale range and resolution in powers of ten (too extreme causes problems)
-scales = 10.^linspace(-11,-10,11);
+scales = 10.^linspace(-16,-9,11);
 %interpolation settings
-interpRes = 1e2; %reduce if getting odd loops/zig-zags
+interpRes = 1e3; %reduce if getting odd loops/zig-zags
 interpMode = 'linear'; %pchip is better, but much slower than linear
 %initial KE, setting exactly to 0 causes division by 0 in DEs
 Tinit = 1e-3;
 %start point
 xi = -1;
 yi = 0;
-yi = -yi; %janky reasons don't change
 %end point
 xf = 3;
 yf = 1.5;
 %NOTE: Avoid BCs that are vertical to each other as slope is used for curve fitting
-m = (yf-yi)/(xf-xi);
 
+m = abs((yf-yi)/(xf-xi));
 tBest = inf;
 syms x(s) y(s) U(x, y) x2 y2
 
@@ -75,8 +74,8 @@ for theta = dydxStart:dydxInc:dydxEnd
         
         %ICs
         t0 = 0;
-        s0 = [xi;-yi;dxi;dyi];
-        sp0 =  [dxi;dyi;0;0];
+        s0 = [xi;yi;dxi;dyi];
+        sp0 = [dxi;dyi;0;0];
 
         %solve system and remove duplicate points
         [~, sol] = ode15i(F, [t0, 1e9], s0, sp0);
@@ -92,7 +91,7 @@ for theta = dydxStart:dydxInc:dydxEnd
         xsol = pt(:,1);
         ysol = pt(:,2);
         %find best fit to BCs (based on relative position of start and end points)
-        [~,fitIndex] = min( abs( (ysol(2:end)-yi)./(xsol(2:end)-xi) - m ) );
+        [~,fitIndex] = min( abs( abs((ysol(2:end)-yi)./(xsol(2:end)-xi)) - m ) );
         xsol = xsol(1:fitIndex+1);
         if numel(xsol) < 2
             continue
@@ -100,7 +99,7 @@ for theta = dydxStart:dydxInc:dydxEnd
         ysol = ysol(1:fitIndex+1);
         %scale best fit to BCs
         xsol = (xsol-xi)*(xf-xi)/(xsol(fitIndex+1)-xi)+xi;
-        ysol = (ysol+yi)*(yf+yi)/(ysol(fitIndex+1)+yi)-yi;
+        ysol = (ysol-yi)*(yf-yi)/(ysol(fitIndex+1)-yi)+yi;
         %interpolate scaled solution
         pt = interparc(interpRes,xsol,ysol,interpMode);
         xsol = pt(:,1);
@@ -125,11 +124,38 @@ for theta = dydxStart:dydxInc:dydxEnd
             dydxBest = dydx;
             dydxScaleBest = dydxScale;
             thetaBest = theta;
+            fitIndexBest = fitIndex;
         end
     end
 end
 
+%spline fit the best solution
+pt = interparc(1e3,xsolBestRaw,ysolBestRaw,'spline');
+xsol = pt(:,1);
+ysol = pt(:,2);
+%find best fit to BCs (based on relative position of start and end points)
+[~,fitIndex] = min( abs( abs((ysol(2:end)-yi)./(xsol(2:end)-xi)) - m ) );
+xsol = xsol(1:fitIndex+1);
+ysol = ysol(1:fitIndex+1);
+%scale best fit to BCs
+xsol = (xsol-xi)*(xf-xi)/(xsol(fitIndex+1)-xi)+xi;
+ysol = (ysol-yi)*(yf-yi)/(ysol(fitIndex+1)-yi)+yi;
+%interpolate scaled solution
+pt = interparc(1e3,xsol,ysol,'spline');
+xsol = pt(:,1);
+ysol = pt(:,2);
+%time = d/v, v=sqrt(E-U)
+d = sqrt((ysol(2)-ysol(1))^2+(xsol(2)-xsol(1))^2); %interparc generates equidistant points
+timeBestSpline = sum( d ./ sqrt(E - ...
+    -( -1./sqrt(ysol(2:end).^2+xsol(2:end).^2)...
+    -1./sqrt(ysol(2:end).^2+(xsol(2:end)+0.5).^2)...
+    -1./sqrt((ysol(2:end)-2).^2+xsol(2:end).^2)...
+    -1./sqrt((ysol(2:end)-1).^2+(xsol(2:end)-2).^2) )) );
+xsolBestSpline = xsol;
+ysolBestSpline = ysol;
+
 plot(xsolBest, ysolBest, '.b')
+plot(xsolBestSpline, ysolBestSpline, '.g')
 plot([xi xf], [yi yf], 'ob')
 fcontour(U2, [-1.5, 2.5, -1, 2.5])
 csvwrite('trajectory.csv',[xsolBest ysolBest])
