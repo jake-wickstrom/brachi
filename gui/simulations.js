@@ -45,7 +45,60 @@ $(document).ready(function() {
   document.getElementById("backButton").addEventListener("click", function() {
     // TODO: figure this out
   });
+
+  var c = document.getElementById("potentialCanvas");
+  c.width = $('#canvasCol').width();
+  c.height = window.innerHeight * CANVAS_HEIGHT_SCALE;
+  var ctx_f = c.getContext("2d");
+  // TODO: replace this with some Django-compatible stuff
+  // The backend will pass something with high resolution that will be
+  // downsampled to fit in the canvas.
+  for (var i = 0; i < 10; i++) {
+    var points = getPoints(i*getMaxPotential()/10, c.width, c.height, 100);
+    for (var j = 0; j < points.length - 1; j++) {
+      ctx_f.beginPath();
+      ctx_f.moveTo(points[j][0], points[j][1]);
+      ctx_f.lineTo(points[j+1][0], points[j+1][1]);
+      ctx_f.stroke();
+    }
+  }
 });
+
+// TODO: put the stuff below this in Django
+// Returns n points that are equipotential.
+// Energy is the energy to look for, xmax and ymax are the maximum bounds of
+// the canvas.
+// The list of points is made to be used directly in the canvas to draw lines.
+function getPoints(energy, xmax, ymax, n) {
+  var backend_xmax = 4000;
+  var backend_ymax = 4000;
+
+  if (energy > getMaxPotential() || energy < getMinPotential()) {
+    return [[0, 0]];
+  }
+  var x_scale = backend_xmax / xmax;
+  var y_scale = backend_ymax / ymax;
+
+  var y = energy / (1 * 1); // h = E/(mg)
+  var canvas_y = Math.floor(ymax - y / y_scale);
+  var x_res = xmax / n;
+
+  var return_list = [];
+  var x_pos = 0;
+  for (var i = 0; i < n; i++) {
+    return_list.push([Math.floor(x_pos + i*x_res), canvas_y]);
+  }
+  return return_list;
+}
+
+function getMaxPotential() {
+  return 4000 * 1 * 1;
+}
+
+function getMinPotential() {
+  return 0;
+}
+// TODO: pass everything above with Django
 
 function FinePath(xpath, ypath) {
   this.xpath = xpath;
