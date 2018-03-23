@@ -5,6 +5,7 @@ const MARBLE_RADIUS = 5;
 const FILTER_INTERVAL = 20;
 const CANVAS_WIDTH_SCALE = 1;
 const CANVAS_HEIGHT_SCALE = 0.8;
+const TIMESCALE = 4;
 
 var mouseDownFlag = false;
 var canvas = document.getElementById("simCanvas");
@@ -40,6 +41,7 @@ $(document).ready(function() {
 
   document.getElementById("startButton").addEventListener("click", function() {
     runAnimation = true;
+    marble.startTimer();
     animate();
   });
 
@@ -72,6 +74,7 @@ function Marble(xpath, ypath, pathTimes, directions) {
   this.x = this.xpath[0];
   this.y = this.ypath[0];
   this.pathIndex = 0;
+  this.timer = 0;
   var movingBackwards = false;
 
   this.draw = function() {
@@ -100,6 +103,7 @@ function Marble(xpath, ypath, pathTimes, directions) {
     this.y = this.ypath[this.pathIndex];
   }
 
+  //Deprecated
   this.wait = function() {
     //var t0 = new Date().getTime();
     sleep(this.pathTimes[this.pathIndex] * 1000);
@@ -121,6 +125,28 @@ function Marble(xpath, ypath, pathTimes, directions) {
     this.ypath = []
     this.pathTimes = [];
     this.directions = [];
+  }
+  
+  this.startTimer = function(timestamp) {
+	this.timer = performance.now();
+  }
+  
+  this.waitTimer = function() {
+	var dtPath = this.pathTimes[this.pathIndex]*1000/TIMESCALE;
+	var inc = 1;
+	/*TODO: if (!movingForward) {
+	  inc = -1;
+	}*/
+
+	while(this.getTimer() > dtPath && this.pathIndex < pathTimes.length-1) {
+	  this.pathIndex += inc;
+	  dtPath += this.pathTimes[this.pathIndex]*1000/TIMESCALE;
+  	}
+	while (this.getTimer() < dtPath) {}
+  }
+  
+  this.getTimer = function() {
+    return performance.now() - this.timer;
   }
 }
 
@@ -168,12 +194,13 @@ function animate() {
   if (!runAnimation) {
     return;
   }
-  requestAnimationFrame(animate);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   finePath.draw();
-  marble.wait();
   marble.draw();
   marble.update();
+  marble.waitTimer();
+  marble.startTimer();
+  requestAnimationFrame(animate);
 }
 
 function filterPoints(intv) {
