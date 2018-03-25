@@ -5,7 +5,7 @@ const FILTER_INTERVAL = 20;
 const CANVAS_WIDTH_SCALE = 1;
 const CANVAS_HEIGHT_SCALE = 0.8;
 const TIMESCALE = 4;
-const DISTANCE_FILTER = 10;
+const DISTANCE_FILTER = 20;
 const NUM_SPLINE_POINTS = 1000;
 
 var mouseDownFlag = false;
@@ -27,6 +27,7 @@ $(document).ready(function() {
   document.getElementById('simCanvas').addEventListener('mousemove', getMouseLoc);
   document.getElementById('simCanvas').addEventListener('mousedown', mouseDown);
   document.getElementById('simCanvas').addEventListener('mouseup', mouseUp);
+  //document.getElementById('simCanvas').addEventListener('mouseout', mouseUp); //TODO: fix this so it doesn't affect the animation
   window.addEventListener('resize', function() {
     canvas.width = $('#canvasCol').width();
     canvas.height = window.innerHeight * CANVAS_HEIGHT_SCALE;
@@ -89,8 +90,6 @@ function Marble(path, pathTimes, directions) {
     }
   }
 
-  console.log(this.turningPoint);
-
   this.draw = function() {
     ctx.beginPath();
     ctx.arc(this.x, this.y, MARBLE_RADIUS, 0, 2 * Math.PI);
@@ -99,9 +98,12 @@ function Marble(path, pathTimes, directions) {
   }
 
   this.update = function() {
-    if ((this.directions[this.pathIndex] == 1) && !movingBackwards) {
+    if ((this.directions[this.pathIndex] == true) && !movingBackwards) { // check if moving forward
+      if(this.pathIndex == this.directions.length - 1) { // stop animation if path is complete
+        runAnimation = false;
+      }
       this.pathIndex++;
-    } else if ((this.directions[this.pathIndex] == 0) && !movingBackwards) {
+    } else if ((this.directions[this.pathIndex] == false) && !movingBackwards) { // check if turning point reached
       movingBackwards = true;
       this.pathIndex--;
     } else {
@@ -159,7 +161,7 @@ function simulate(path) {
   var u0 = M * GRAV * invY(path.ypath[0]);
   var k0 = 0.5 * M * v0 * v0;
   times.push(0);
-  directions.push(1);
+  directions.push(true);
 
   for (var i = 1; i < path.ypath.length; i++) {
     var u = M * GRAV * invY(path.ypath[i]); // TODO: change this so it calls a poptential energy function
@@ -170,15 +172,15 @@ function simulate(path) {
 
     if (vSqr > 0) {
       if (movingForward) {
-        directions.push(1);
+        directions.push(true);
       } else {
-        directions.push(-1);
+        directions.push(false);
       }
 
       //dt = Math.sqrt((DX * DX + dy * dy) / vSqr);
       dt = ds / Math.sqrt(vSqr);
     } else if (vSqr <= 0) {
-      directions.push(0);
+      directions.push(false);
       movingForward = false;
       dt = 0; //TODO: this might be wrong
       t = Number.POSITIVE_INFINITY;
