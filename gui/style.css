@@ -14,6 +14,11 @@ body {
   padding: 0px;
 }
 
+#error-display {
+  font-family: 'Indie Flower', cursive;
+  font-size: 25px;
+}
+
 #info-display {
   font-family: 'Indie Flower', cursive;
   font-size: 25px;

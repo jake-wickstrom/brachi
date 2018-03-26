@@ -2,18 +2,22 @@ const GRAV = 9.81;
 const M = 1;
 const MARBLE_RADIUS = 5;
 const FILTER_INTERVAL = 20;
-const CANVAS_WIDTH_SCALE = 1;
-const CANVAS_HEIGHT_SCALE = 0.8;
 const TIMESCALE = 4;
 const DISTANCE_FILTER = 20;
 const NUM_SPLINE_POINTS = 1000;
+const ENDPOINT_CIRCLE_RADIUS = 15;
+// Below values are to be modified by backend depending on level sleceted
+const X_START = 20;
+const Y_START = 20;
+const X_END = 450;
+const Y_END = 450;
 
 var mouseDownFlag = false;
 var canvas = document.getElementById("simCanvas");
 var ctx = canvas.getContext("2d");
 
 canvas.width = $('#canvasCol').width();
-canvas.height = window.innerHeight * CANVAS_HEIGHT_SCALE;
+canvas.height = $('#canvasCol').width();
 
 // arrays of unfiltered x and y points captured during mouse movement
 var xpoints = [];
@@ -24,28 +28,39 @@ var marble;
 var finePath;
 
 $(document).ready(function() {
+  var endPoints = new EndPoints(X_START, Y_START, X_END, Y_END);
+  endPoints.draw();
+
   document.getElementById('simCanvas').addEventListener('mousemove', getMouseLoc);
   document.getElementById('simCanvas').addEventListener('mousedown', mouseDown);
   document.getElementById('simCanvas').addEventListener('mouseup', mouseUp);
   //document.getElementById('simCanvas').addEventListener('mouseout', mouseUp); //TODO: fix this so it doesn't affect the animation
   window.addEventListener('resize', function() {
     canvas.width = $('#canvasCol').width();
-    canvas.height = window.innerHeight * CANVAS_HEIGHT_SCALE;
+    canvas.height = $('#canvasCol').width();
   });
 
   document.getElementById("resetButton").addEventListener("click", function() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
+    endPoints.draw();
+    document.getElementById('error-display').innerHTML = "Draw a path that starts and ends in the given circles";
     runAnimation = false;
     xpoints = [];
     ypoints = [];
-    marble.reset();
-    finePath.reset();
+
+    if((typeof marble !== 'undefined') && (typeof finePath !== 'undefined')) {
+      marble.reset();
+      finePath.reset();
+    }
   });
 
   document.getElementById("startButton").addEventListener("click", function() {
-    runAnimation = true;
-    marble.startTimer();
-    animate();
+    if((typeof marble !== 'undefined') && (typeof finePath !== 'undefined')) {
+      document.getElementById('error-display').innerHTML = "Simulating the motion of the marble...";
+      runAnimation = true;
+      marble.startTimer();
+      animate();
+    }
   });
 
   document.getElementById("backButton").addEventListener("click", function() {
@@ -57,7 +72,7 @@ $(document).ready(function() {
 function Path(xpath, ypath, arclen = []) {
   this.xpath = xpath;
   this.ypath = ypath;
-  this.arclen =  arclen;
+  this.arclen = arclen;
 
   this.draw = function() {
     for (var i = 1; i < this.xpath.length; i++) {
@@ -68,6 +83,7 @@ function Path(xpath, ypath, arclen = []) {
   this.reset = function() {
     this.xpath = [];
     this.ypath = [];
+    this.arclen = [];
   }
 }
 
@@ -83,8 +99,8 @@ function Marble(path, pathTimes, directions) {
   this.turningPoint = Number.POSITIVE_INFINITY;
   var movingBackwards = false;
 
-  for(var i = 0; i < this.directions.length; i++) {
-    if(this.directions[i] <= 0) {
+  for (var i = 0; i < this.directions.length; i++) {
+    if (this.directions[i] <= 0) {
       this.turningPoint = i;
       break;
     }
@@ -99,7 +115,7 @@ function Marble(path, pathTimes, directions) {
 
   this.update = function() {
     if ((this.directions[this.pathIndex] == true) && !movingBackwards) { // check if moving forward
-      if(this.pathIndex == this.directions.length - 1) { // stop animation if path is complete
+      if (this.pathIndex == this.directions.length - 1) { // stop animation if path is complete
         runAnimation = false;
       }
       this.pathIndex++;
@@ -132,14 +148,14 @@ function Marble(path, pathTimes, directions) {
 
   this.waitTimer = function() {
     var dtPath = this.pathTimes[this.pathIndex] * 1000 / TIMESCALE;
-    if(!movingBackwards) {
+    if (!movingBackwards) {
       var inc = 1;
     } else {
       var inc = -1;
     }
 
     while (this.getTimer() > dtPath && this.pathIndex < pathTimes.length - 1) {
-      if(this.pathIndex < this.turningPoint) {
+      if (this.pathIndex < this.turningPoint) {
         this.pathIndex += inc;
         dtPath += this.pathTimes[this.pathIndex] * 1000 / TIMESCALE;
       }
@@ -149,6 +165,22 @@ function Marble(path, pathTimes, directions) {
 
   this.getTimer = function() {
     return performance.now() - this.timer;
+  }
+}
+
+function EndPoints(x0, y0, xf, yf) {
+  this.x0 = x0;
+  this.y0 = y0;
+  this.xf = xf;
+  this.yf = yf;
+
+  this.draw = function() {
+    ctx.beginPath();
+    ctx.arc(this.x0, this.y0, ENDPOINT_CIRCLE_RADIUS, 0, 2 * Math.PI);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.arc(this.xf, this.yf, ENDPOINT_CIRCLE_RADIUS, 0, 2 * Math.PI);
+    ctx.stroke();
   }
 }
 
@@ -210,19 +242,19 @@ function animate() {
 }
 
 // filters points based on their Euclidean distance from each other
-function filterPoints(xs, ys) {
+function filterPoints(xs, ys, x0, y0, xf, yf) {
   var xfiltered = [];
   var yfiltered = [];
-  xfiltered.push(xs[0]);
-  yfiltered.push(ys[0]);
+  xfiltered.push(x0);
+  yfiltered.push(y0);
 
-  for(var i = 1; i < xs.length; i++) {
-    for(var j = i; j < xs.length; j++) {
+  for (var i = 1; i < xs.length; i++) {
+    for (var j = i; j < xs.length; j++) {
       var dx = xs[j] - xs[i - 1];
       var dy = ys[j] - ys[i - 1];
       var dist = Math.sqrt(dx * dx + dy * dy);
 
-      if(dist > DISTANCE_FILTER) {
+      if (dist > DISTANCE_FILTER) {
         xfiltered.push(xs[j]);
         yfiltered.push(ys[j]);
         i = j;
@@ -230,6 +262,9 @@ function filterPoints(xs, ys) {
       }
     }
   }
+
+  xfiltered.push(xf);
+  yfiltered.push(yf);
 
   return new Path(xfiltered, yfiltered);
 }
@@ -257,12 +292,32 @@ function mouseDown(event) {
 
 function mouseUp(event) {
   mouseDownFlag = false;
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  var filteredPath = filterPoints(xpoints, ypoints);
-  var spline = CSPL.paraSpline(filteredPath.xpath, filteredPath.ypath, NUM_SPLINE_POINTS);
-  finePath = new Path(spline.xvals, spline.yvals, spline.arcvals);
-  finePath.draw();
-  simulate(finePath);
+
+  // calculate distance path was drawn from end points to check valud path
+  var xStartDist = X_START - xpoints[0];
+  var yStartDist = Y_START - ypoints[0];
+  var xEndDist = X_END - xpoints[xpoints.length - 1];
+  var yEndDist = Y_END - ypoints[ypoints.length - 1];
+  var distFromStart = Math.sqrt(xStartDist * xStartDist + yStartDist + yStartDist);
+  var distFromEnd = Math.sqrt(xEndDist * xEndDist + yEndDist * yEndDist);
+  if (distFromStart >= ENDPOINT_CIRCLE_RADIUS || distFromEnd >= ENDPOINT_CIRCLE_RADIUS) {
+    console.log('Not a valid path drawn');
+    document.getElementById('error-display').innerHTML = "Redraw a valid path starting and ending in the circles";
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    xpoints = [];
+    ypoints = [];
+    var endPoints = new EndPoints(X_START, Y_START, X_END, Y_END);
+    endPoints.draw();
+
+  } else {
+    document.getElementById('error-display').innerHTML = "Press Start!";
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    var filteredPath = filterPoints(xpoints, ypoints, X_START, Y_START, X_END, Y_END);
+    var spline = CSPL.paraSpline(filteredPath.xpath, filteredPath.ypath, NUM_SPLINE_POINTS);
+    finePath = new Path(spline.xvals, spline.yvals, spline.arcvals);
+    finePath.draw();
+    simulate(finePath);
+  }
 }
 
 function connectPoints(x1, y1, x2, y2) {
