@@ -11,23 +11,28 @@ warning off %ode15i generates many warnings
 dydxStart = 2*pi*0;
 dydxEnd =   2*pi*1;
 %IC angle resolution
-dydxInc = 2*pi/90;
+dydxInc = 2*pi/180;
 %IC scale range and resolution in powers of ten (too extreme causes problems)
-scales = 10.^linspace(-16,-9,11);
+scales = 10.^linspace(-16,-4,120);
 %interpolation settings
 interpRes = 1e3; %reduce if getting odd loops/zig-zags
 interpMode = 'linear'; %pchip is better, but much slower than linear
 %initial KE, setting exactly to 0 causes division by 0 in DEs
 Tinit = 1e-3;
 %start point
-xi = -1;
-yi = 0;
+xi = 0;
+yi = 1;
 %end point
-xf = 3;
-yf = 1.5;
+xf = 5;
+yf = -0.5;
 %NOTE: Avoid BCs that are vertical to each other as slope is used for curve fitting
 
 m = abs((yf-yi)/(xf-xi));
+fitLinex = [xi-1e0*(xf-xi) xi xi-1e0*(xf-xi) xi xi+1e0*(xf-xi) xi xi+1e0*(xf-xi)];
+fitLiney = [yi-1e0*(yf-yi) yi yi+1e0*(yf-yi) yi yi-1e0*(yf-yi) yi yi+1e0*(yf-yi)];
+% pt = interparc(interpRes,fitLinex,fitLiney,'linear');
+% fitLinex = pt(:,1);
+% fitLiney = pt(:,2);
 tBest = inf;
 syms x(s) y(s) U(x, y) x2 y2
 
@@ -36,13 +41,16 @@ syms x(s) y(s) U(x, y) x2 y2
 % U = -1/sqrt(y^2+x^2)+1/sqrt(y^2+(x+0.5)^2)-1/sqrt((y-2)^2+x^2); %attractive charges at (0,0), (0,2), repulsive charge at (-0.5,0)
 % U2 = -1/sqrt(y2^2+x2^2)+1/sqrt(y2^2+(x2+0.5)^2)-1/sqrt((y2-2)^2+x2^2); %for contour plots
 
-U = -1/sqrt(y^2+x^2)-1/sqrt(y^2+(x+0.5)^2)-1/sqrt((y-2)^2+x^2)-1/sqrt((y-1)^2+(x-2)^2); %attractive charges at (0,0), (0,2), (-0.5,0), (2,1)
-U2 = -1/sqrt(y2^2+x2^2)-1/sqrt(y2^2+(x2+0.5)^2)-1/sqrt((y2-2)^2+x2^2)-1/sqrt((y2-1)^2+(x2-2)^2);
-U = -U; %repulsive version ("asteroid field")
-U2 = -U2;
+% U = -1/sqrt(y^2+x^2)-1/sqrt(y^2+(x+0.5)^2)-1/sqrt((y-2)^2+x^2)-1/sqrt((y-1)^2+(x-2)^2); %attractive charges at (0,0), (0,2), (-0.5,0), (2,1)
+% U2 = -1/sqrt(y2^2+x2^2)-1/sqrt(y2^2+(x2+0.5)^2)-1/sqrt((y2-2)^2+x2^2)-1/sqrt((y2-1)^2+(x2-2)^2);
+% U = -U; %repulsive version ("asteroid field")
+% U2 = -U2;
 
 % U = y; %constant g-field
 % U2 = y2;
+
+U = y^2;
+U2 = 1e-99*x2 + y2^2;
 
 E = eval(subs(U, [x(s),y(s)], [xi,yi]))+Tinit; %Set initial KE to Tinit
 if eval(subs(U, [x(s),y(s)], [xf,yf])) > E-Tinit
@@ -69,7 +77,6 @@ for theta = dydxStart:dydxInc:dydxEnd
         %rotate ICs
         dxi = cos(theta)*dydxScale;
         dyi = sin(theta)*dydxScale;
-        dydx = dyi/dxi;
         disp([dxi dyi theta])
         
         %ICs
@@ -92,54 +99,76 @@ for theta = dydxStart:dydxInc:dydxEnd
         ysol = pt(:,2);
         %find best fit to BCs (based on relative position of start and end points)
         [~,fitIndex] = min( abs( abs((ysol(2:end)-yi)./(xsol(2:end)-xi)) - m ) );
-        xsol = xsol(1:fitIndex+1);
-        if numel(xsol) < 2
-            continue
-        end
-        ysol = ysol(1:fitIndex+1);
-        %scale best fit to BCs
-        xsol = (xsol-xi)*(xf-xi)/(xsol(fitIndex+1)-xi)+xi;
-        ysol = (ysol-yi)*(yf-yi)/(ysol(fitIndex+1)-yi)+yi;
-        %interpolate scaled solution
-        pt = interparc(interpRes,xsol,ysol,interpMode);
-        xsol = pt(:,1);
-        ysol = pt(:,2);
-        
-        %time = d/v, v=sqrt(E-U)
-        d = sqrt((ysol(2)-ysol(1))^2+(xsol(2)-xsol(1))^2); %interparc generates equidistant points
-        time = sum( d ./ sqrt(E - ...
-            -( -1./sqrt(ysol(2:end).^2+xsol(2:end).^2)...
-            -1./sqrt(ysol(2:end).^2+(xsol(2:end)+0.5).^2)...
-            -1./sqrt((ysol(2:end)-2).^2+xsol(2:end).^2)...
-            -1./sqrt((ysol(2:end)-1).^2+(xsol(2:end)-2).^2) )) );
-%         time = sum( d ./ sqrt(E - ...
-%             ( ysol(2:end) )) );
-        
-        if time < tBest && isreal(time)
-            xsolBest = xsol;
-            ysolBest = ysol;
-            xsolBestRaw = sol(:,1);
-            ysolBestRaw = sol(:,2);
-            tBest = time;
-            dydxBest = dydx;
-            dydxScaleBest = dydxScale;
-            thetaBest = theta;
-            fitIndexBest = fitIndex;
+        [~,~,fitIndices,~] = intersections(xsol(2:end),ysol(2:end),fitLinex,fitLiney);
+        fitIndices = [round(fitIndices)' fitIndex];
+%         if numel(fitIndices) > 0
+%             hold on
+%             plot(xsol, ysol, '.');
+%             plot(xsol(fitIndices), ysol(fitIndices), 'o');
+%             plot(fitLinex, fitLiney);
+%             if xsol(end) > xsol(1) 
+%                 xlim([xsol(1)-abs(xsol(1)*0.1) xsol(end)+abs(xsol(1)*0.1)])
+%             else
+%                 xlim([xsol(end)-abs(xsol(1)*0.1) xsol(1)+abs(xsol(1)*0.1)])
+%             end
+%             if ysol(end) > ysol(1) 
+%                 ylim([ysol(1)-abs(ysol(1)*0.1) ysol(end)+abs(ysol(1)*0.1)])
+%             else
+%                 ylim([ysol(end)-abs(ysol(1)*0.1) ysol(1)+abs(ysol(1)*0.1)])
+%             end
+%             pause
+%             close all
+%         end
+        for fitIndex = fitIndices
+            if fitIndex + 1 > numel(xsol)
+                fitIndex = fitIndex - 1;
+            end
+            xsol = xsol(1:fitIndex+1);
+            if numel(xsol) < 2
+                continue
+            end
+            ysol = ysol(1:fitIndex+1);
+            %scale best fit to BCs
+            xsol = (xsol-xi)*(xf-xi)/(xsol(fitIndex+1)-xi)+xi;
+            ysol = (ysol-yi)*(yf-yi)/(ysol(fitIndex+1)-yi)+yi;
+            %interpolate scaled solution
+            pt = interparc(interpRes,xsol,ysol,interpMode);
+            xsol = pt(:,1);
+            ysol = pt(:,2);
+
+            %time = d/v, v=sqrt(E-U)
+            d = sqrt((ysol(2)-ysol(1))^2+(xsol(2)-xsol(1))^2); %interparc generates equidistant points
+%             time = sum( d ./ sqrt(E - ...
+%                 -( -1./sqrt(ysol(2:end).^2+xsol(2:end).^2)...
+%                 -1./sqrt(ysol(2:end).^2+(xsol(2:end)+0.5).^2)...
+%                 -1./sqrt((ysol(2:end)-2).^2+xsol(2:end).^2)...
+%                 -1./sqrt((ysol(2:end)-1).^2+(xsol(2:end)-2).^2) )) );
+%             time = sum( d ./ sqrt(E - ...
+%                 ( ysol(2:end) )) );
+            time = sum( d ./ sqrt(E - ...
+                ( ysol(2:end).^2 )) );
+
+            if time < tBest && isreal(time)
+                xsolBest = xsol;
+                ysolBest = ysol;
+                xsolBestRaw = sol(:,1);
+                ysolBestRaw = sol(:,2);
+                tBest = time;
+                dydxScaleBest = dydxScale;
+                thetaBest = theta;
+                fitIndexBest = fitIndex;
+            end
         end
     end
 end
 
 %spline fit the best solution
 pt = interparc(1e3,xsolBestRaw,ysolBestRaw,'spline');
-xsol = pt(:,1);
-ysol = pt(:,2);
-%find best fit to BCs (based on relative position of start and end points)
-[~,fitIndex] = min( abs( abs((ysol(2:end)-yi)./(xsol(2:end)-xi)) - m ) );
-xsol = xsol(1:fitIndex+1);
-ysol = ysol(1:fitIndex+1);
+xsol = pt(1:fitIndexBest+1,1);
+ysol = pt(1:fitIndexBest+1,2);
 %scale best fit to BCs
-xsol = (xsol-xi)*(xf-xi)/(xsol(fitIndex+1)-xi)+xi;
-ysol = (ysol-yi)*(yf-yi)/(ysol(fitIndex+1)-yi)+yi;
+xsol = (xsol-xi)*(xf-xi)/(xsol(fitIndexBest+1)-xi)+xi;
+ysol = (ysol-yi)*(yf-yi)/(ysol(fitIndexBest+1)-yi)+yi;
 %interpolate scaled solution
 pt = interparc(1e3,xsol,ysol,'spline');
 xsol = pt(:,1);
@@ -147,16 +176,13 @@ ysol = pt(:,2);
 %time = d/v, v=sqrt(E-U)
 d = sqrt((ysol(2)-ysol(1))^2+(xsol(2)-xsol(1))^2); %interparc generates equidistant points
 timeBestSpline = sum( d ./ sqrt(E - ...
-    -( -1./sqrt(ysol(2:end).^2+xsol(2:end).^2)...
-    -1./sqrt(ysol(2:end).^2+(xsol(2:end)+0.5).^2)...
-    -1./sqrt((ysol(2:end)-2).^2+xsol(2:end).^2)...
-    -1./sqrt((ysol(2:end)-1).^2+(xsol(2:end)-2).^2) )) );
+    ( ysol(2:end).^2 )) );
 xsolBestSpline = xsol;
 ysolBestSpline = ysol;
 
 plot(xsolBest, ysolBest, '.b')
 plot(xsolBestSpline, ysolBestSpline, '.g')
 plot([xi xf], [yi yf], 'ob')
-fcontour(U2, [-1.5, 2.5, -1, 2.5])
+fcontour(U2, [0, 5, -1, 1.5])
 csvwrite('trajectory.csv',[xsolBest ysolBest])
 warning on
