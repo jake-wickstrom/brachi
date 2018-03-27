@@ -10,7 +10,7 @@ To clear the current database on your machine:
  > python manage.py flush
 """
 
-# TODO: add best times for correct number of levels
+# TODO: add slots for times for correct number of levels
 class Player(models.Model):
     name = models.CharField(max_length=21)
     time_l0 = models.FloatField(default=999.9)

@@ -24,6 +24,7 @@ SECRET_KEY = ')x%nv68^h@-=jyag+8w+i4au9d-km+wg36hx-zvqih$^#3@#4q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# TODO: change debug to False before this server is demonstrated in class
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 

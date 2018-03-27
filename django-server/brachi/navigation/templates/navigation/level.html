@@ -11,7 +11,8 @@
   <script>
     var i;
     $(document).ready(function() {
-      //try to do access the getPotential script and post stuff
+      // TODO: all of this code needs to be adapted for the real level
+      // right now I am just testing the submit functionality
       i = 0;
       var level = {{ level }};
       var potential = getPotential(100, 200, 500, 600);
@@ -27,22 +28,38 @@
 
       post('play/submit/', dict)
     });
+    /*
+     * This function is used instead of the usual form submit method as it allows
+     * the POST request to submit without refreshing the page.
+     */
     function submitForm(form) {
-      $.ajax({ // create an AJAX call...
-          data: $("#" + form.getAttribute("id")).serialize(), // get the form data
-          type: $("#" + form.getAttribute("id")).attr('method'), // GET or POST
-          url:  $("#" + form.getAttribute("id")).attr('action'), // the file to call
-          success: function() { // on success..
+      $.ajax({
+          data: $("#" + form.getAttribute("id")).serialize(),
+          type: $("#" + form.getAttribute("id")).attr('method'),
+          url:  $("#" + form.getAttribute("id")).attr('action'),
+          success: function() {
               console.log("Submitted time.");
           },
-          error: function() { // on error..
+          error: function() {
               console.log("Failed to submit time.");
           }
       });
     }
     /*
-     * For example:
-     * post('navigation/play/submit/', {level: 1, time: 10.27});
+     * This function is used to submit POST requests. A hidden form is created
+     * with a unique id which then submits itself using the submitForm() function.
+     *
+     * To use this:
+     * 1. Create a dictionary with the information to pass to the form:
+     *    var dict = [];
+     *    dict.push({
+     *      key: "level",
+     *      value: 1
+     *    });
+     *    You can repeat the "push" for all of the variables needed in the form.
+     *
+     * 2. Make the following function call:
+     *    post('navigation/play/submit/', dict);
      */
     function post(path, params, method) {
       i = i + 1;
@@ -61,7 +78,7 @@
         }
       }
       document.body.appendChild(form);
-      submitForm(form);
+      submitForm(form); // use the function we made as opposed to the usual form submit behavior
     }
   </script>
 </html>
