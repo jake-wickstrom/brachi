@@ -15,6 +15,9 @@
     {% if invalid_name %}
       <div style="color:red;">The username you entered was invalid. Please try another name.</div>
     {% endif %}
+    {% if session_error %}
+      <div style="color:red;">There was an error validating the session. You will have to play again with a new username.</div>
+    {% endif %}
   <script>
     function submitName() {
       var username = document.getElementById('username').value.trim();

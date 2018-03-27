@@ -13,6 +13,6 @@ To clear the current database on your machine:
 # TODO: add best times for correct number of levels
 class Player(models.Model):
     name = models.CharField(max_length=21)
+    time_l0 = models.FloatField(default=999.9)
     time_l1 = models.FloatField(default=999.9)
     time_l2 = models.FloatField(default=999.9)
-    time_l3 = models.FloatField(default=999.9)

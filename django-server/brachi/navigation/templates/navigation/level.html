@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+  </head>
+  <body>
+    Level Page
+  </body>
+  {% autoescape off %}
+  {{ script }}
+  {% endautoescape %}
+  <script>
+    var i;
+    $(document).ready(function() {
+      //try to do access the getPotential script and post stuff
+      i = 0;
+      var level = {{ level }};
+      var potential = getPotential(100, 200, 500, 600);
+      var dict = [];
+      dict.push({
+        key: "level",
+        value: level
+      });
+      dict.push({
+        key: "time",
+        value: potential
+      });
+
+      post('play/submit/', dict)
+    });
+    function submitForm(form) {
+      $.ajax({ // create an AJAX call...
+          data: $("#" + form.getAttribute("id")).serialize(), // get the form data
+          type: $("#" + form.getAttribute("id")).attr('method'), // GET or POST
+          url:  $("#" + form.getAttribute("id")).attr('action'), // the file to call
+          success: function() { // on success..
+              console.log("Submitted time.");
+          },
+          error: function() { // on error..
+              console.log("Failed to submit time.");
+          }
+      });
+    }
+    /*
+     * For example:
+     * post('navigation/play/submit/', {level: 1, time: 10.27});
+     */
+    function post(path, params, method) {
+      i = i + 1;
+      method = method || "post";
+      var form = document.createElement("form");
+      form.setAttribute("method", method);
+      form.setAttribute("action", path);
+      form.setAttribute("id", "time-form" + i)
+      for(var key in params) {
+        if(params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", params[key].key);
+            hiddenField.setAttribute("value", params[key].value);
+            form.appendChild(hiddenField);
+        }
+      }
+      document.body.appendChild(form);
+      submitForm(form);
+    }
+  </script>
+</html>
