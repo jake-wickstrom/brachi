@@ -13,7 +13,7 @@ server and processed by being made into a form like this.
 """
 class SubmitTimeForm(forms.Form):
     level = forms.IntegerField()
-    time = forms.FloatField()
+    time = forms.FloatField(max_value=1000.0, min_value=0.0)
 
 """
 Checks that the user's session contains a valid username. This function should be
@@ -128,9 +128,8 @@ def play(request):
             </script>
             """
             return render(request, 'navigation/level.html', context)
-    except Exception as e:
-        # TODO: get rid of this once debugging is complete
-        print(e)
+    except:
+        pass
     # if the level in the GET request was not legitimate, just send the user to
     # the level select page again
     return level_select(request)
@@ -153,18 +152,18 @@ def play_submit(request):
         return title(request, session_error=True)
     try:
         form = SubmitTimeForm(request.POST)
-        your_time = float(form.data['time'][0])
-        # TODO: the time coming from the front end is incorrect, fix this
-        level = int(form.data['level'][0])
+        your_time = float(form.data['time'])
+        level = int(form.data['level'])
         your_name = request.session['username']
         player = Player.objects.get(name=your_name)
-        # TODO: handle all levels
+        # TODO: handle all levels (level indexing starts at zero remember)
         if level == 1:
-            # TODO: check that time is better, maybe check invalid times?
-            player.time_l1 = your_time
+            # TODO: maybe check invalid times?
+            if player.time_l1 > your_time:
+                player.time_l1 = your_time
+                player.save()
         else:
             raise ValueError("Invalid level passed when submitting user time data.")
-        player.save()
     except:
         return title(request, session_error=True)
     # This return will not refresh or reload the page the user is on if used with

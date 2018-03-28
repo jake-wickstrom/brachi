@@ -15,7 +15,7 @@
       // right now I am just testing the submit functionality
       i = 0;
       var level = {{ level }};
-      var potential = getPotential(100, 200, 500, 600);
+      var potential = 87.52;
       var dict = [];
       dict.push({
         key: "level",
@@ -48,6 +48,7 @@
     /*
      * This function is used to submit POST requests. A hidden form is created
      * with a unique id which then submits itself using the submitForm() function.
+     * PLEASE do not sent invalid times (NaN, inf, negative times) to the backend.
      *
      * To use this:
      * 1. Create a dictionary with the information to pass to the form:
@@ -73,6 +74,7 @@
             var hiddenField = document.createElement("input");
             hiddenField.setAttribute("type", "hidden");
             hiddenField.setAttribute("name", params[key].key);
+            console.log(params[key].value);
             hiddenField.setAttribute("value", params[key].value);
             form.appendChild(hiddenField);
         }
