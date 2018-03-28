@@ -127,8 +127,9 @@ def play(request):
                 }
             </script>
             """
-            return render(request, 'navigation/level.html', context)
-    except:
+            return render(request, 'navigation/simulation_page.html', context)
+    except Exception as e:
+        print(e)
         pass
     # if the level in the GET request was not legitimate, just send the user to
     # the level select page again

@@ -27,6 +27,8 @@ var runAnimation = false;
 var marble;
 var finePath;
 
+var formIndex = 0;
+
 $(document).ready(function() {
   var endPoints = new EndPoints(X_START, Y_START, X_END, Y_END);
   endPoints.draw();
@@ -64,9 +66,64 @@ $(document).ready(function() {
   });
 
   document.getElementById("backButton").addEventListener("click", function() {
-    // TODO: figure this out
+    window.location.assign("/navigation/level-select");
   });
 });
+
+/*
+ * This function is used instead of the usual form submit method as it allows
+ * the POST request to submit without refreshing the page.
+ */
+function submitForm(form) {
+  $.ajax({
+      data: $("#" + form.getAttribute("id")).serialize(),
+      type: $("#" + form.getAttribute("id")).attr('method'),
+      url:  $("#" + form.getAttribute("id")).attr('action'),
+      success: function() {
+          console.log("Submitted time.");
+      },
+      error: function() {
+          console.log("Failed to submit time.");
+      }
+  });
+}
+
+/*
+ * This function is used to submit POST requests. A hidden form is created
+ * with a unique id which then submits itself using the submitForm() function.
+ * PLEASE do not sent invalid times (NaN, inf, negative times) to the backend.
+ *
+ * To use this:
+ * 1. Create a dictionary with the information to pass to the form:
+ *    var dict = [];
+ *    dict.push({
+ *      key: "level",
+ *      value: 1
+ *    });
+ *    You can repeat the "push" for all of the variables needed in the form.
+ *
+ * 2. Make the following function call:
+ *    post('navigation/play/submit/', dict);
+ */
+function post(path, params, method) {
+  formIndex = formIndex + 1;
+  method = method || "post";
+  var form = document.createElement("form");
+  form.setAttribute("method", method);
+  form.setAttribute("action", path);
+  form.setAttribute("id", "time-form" + formIndex)
+  for(var key in params) {
+    if(params.hasOwnProperty(key)) {
+        var hiddenField = document.createElement("input");
+        hiddenField.setAttribute("type", "hidden");
+        hiddenField.setAttribute("name", params[key].key);
+        hiddenField.setAttribute("value", params[key].value);
+        form.appendChild(hiddenField);
+    }
+  }
+  document.body.appendChild(form);
+  submitForm(form); // use the function we made as opposed to the usual form submit behavior
+}
 
 // arclen parameter is optional
 function Path(xpath, ypath, arclen = []) {
@@ -223,7 +280,21 @@ function simulate(path) {
     t += dt;
   }
 
-  document.getElementById('info-display').innerHTML = "Your Time: " + t.toFixed(1) + " s";
+  document.getElementById('info-display').innerHTML = "Your Time: " + t.toFixed(2) + " s";
+  // check if the time is valid then send it to the server
+  if (!(isNaN(t) || t <= 0.0 || t >= 1000.0)) {
+    var time_dict = [];
+    time_dict.push({
+      key: "level",
+      value: level
+    });
+    time_dict.push({
+      key: "time",
+      value: t.toFixed(2)
+    });
+    post('play/submit/', time_dict)
+  }
+
   marble = new Marble(path, times, directions);
   marble.draw();
 }
