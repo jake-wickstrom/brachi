@@ -18,14 +18,12 @@ Putting code here will cause it to run only once when the command:
  > python manage.py runserver
 is called. Can be used to initiallize the database.
 """
+
 existing_names = Player.objects.values_list('name', flat=True)
 # TODO: update to fastest possible (or something) times given by algorithm
 if 'Sonic the Hedgehog' not in existing_names:
-    sonic = Player(name='Sonic the Hedgehog', time_l0=1.24, time_l1=2.15, time_l2=1.76)
+    sonic = Player(name='Sonic the Hedgehog', time_l0=2.0, time_l1=2.0, time_l2=2.0, time_l3=2.0, time_l4=2.0, time_l5=2.0, time_l6=2.0)
     sonic.save()
-if 'The Fast' not in existing_names:
-    the_fast = Player(name='The Fast', time_l0=1.27, time_l1=2.10, time_l2=1.76)
-    the_fast.save()
-if 'Sonny' not in existing_names:
-    sonny = Player(name='Sonny', time_l0=1.34, time_l1=2.34, time_l2=1.69)
-    sonny.save()
+if 'Daymon' not in existing_names:
+    daymon = Player(name='Daymon', time_l0=1.0, time_l1=1.0, time_l2=1.0, time_l3=1.0, time_l4=1.0, time_l5=1.0, time_l6=1.0)
+    daymon.save()

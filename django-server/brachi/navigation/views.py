@@ -88,6 +88,14 @@ def leaderboard(request):
     context['leaderboards'].append(l1_players)
     l2_players = Player.objects.order_by('time_l2').values_list('name', 'time_l2')
     context['leaderboards'].append(l2_players)
+    l3_players = Player.objects.order_by('time_l3').values_list('name', 'time_l3')
+    context['leaderboards'].append(l3_players)
+    l4_players = Player.objects.order_by('time_l4').values_list('name', 'time_l4')
+    context['leaderboards'].append(l4_players)
+    l5_players = Player.objects.order_by('time_l5').values_list('name', 'time_l5')
+    context['leaderboards'].append(l5_players)
+    l6_players = Player.objects.order_by('time_l6').values_list('name', 'time_l6')
+    context['leaderboards'].append(l6_players)
     # this "if" should never fire in production, it is used to remind the developers
     # in case we forget to update this section of code when new levels are added
     if len(context['levels']) != len(context['leaderboards']):
@@ -103,23 +111,13 @@ def play(request):
     if checkValidSession(request) == False:
         return title(request, session_error=True)
     context = {}
-    # start generating the script to send to the frontend, it will be completed
-    # differently later for each level
-    context['script'] = """
-    <script>
-        /*
-         * Gets the potential energy at a point.
-         * Parameters:
-         *  x    - the x coordinate on the canvas of potential.
-         *  y    - the y coordinate on the canvas ADJUSTED to account for the coordinate system change.
-         *  xmax - the width of the canvas.
-         *  ymax - the height of the canvas.
-         */
-    """
     try:
-        if (int(request.GET['level']) == 1):
-            context['level'] = 1
-            context['script'] = context['script'] + """
+        get_level = int(request.GET['level'])
+        # generate the getPotential() functions to be sent to the front end for each level
+        # TODO: make sure these are correct
+        if get_level == 0:
+            context['script'] = """
+            <script>
                 function getPotential(x, y, xmax, ymax) {
                     var x_pos = x / xmax;
                     var y_pos = y / ymax;
@@ -127,15 +125,78 @@ def play(request):
                 }
             </script>
             """
-            return render(request, 'navigation/simulation_page.html', context)
-    except Exception as e:
-        print(e)
-        pass
+        elif get_level == 1:
+            context['script'] = """
+            <script>
+                function getPotential(x, y, xmax, ymax) {
+                    var x_pos = x / xmax;
+                    var y_pos = y / ymax;
+                    return 1000*y_pos;
+                }
+            </script>
+            """
+        elif get_level == 2:
+            context['script'] = """
+            <script>
+                function getPotential(x, y, xmax, ymax) {
+                    var x_pos = x / xmax;
+                    var y_pos = y / ymax;
+                    return 1000*y_pos;
+                }
+            </script>
+            """
+        elif get_level == 3:
+            context['script'] = """
+            <script>
+                function getPotential(x, y, xmax, ymax) {
+                    var x_pos = x / xmax;
+                    var y_pos = y / ymax;
+                    return 1000*y_pos;
+                }
+            </script>
+            """
+        elif get_level == 4:
+            context['script'] = """
+            <script>
+                function getPotential(x, y, xmax, ymax) {
+                    var x_pos = x / xmax;
+                    var y_pos = y / ymax;
+                    return 1000*y_pos;
+                }
+            </script>
+            """
+        elif get_level == 5:
+            context['script'] = """
+            <script>
+                function getPotential(x, y, xmax, ymax) {
+                    var x_pos = x / xmax;
+                    var y_pos = y / ymax;
+                    return 1000*y_pos;
+                }
+            </script>
+            """
+        elif get_level == 6:
+            context['script'] = """
+            <script>
+                function getPotential(x, y, xmax, ymax) {
+                    var x_pos = x / xmax;
+                    var y_pos = y / ymax;
+                    return 1000*y_pos;
+                }
+            </script>
+            """
+        else:
+            raise ValueError("Invalid level in GET request.")
+        context['level'] = get_level
+        context['level_name'] = ALL_LEVELS[get_level]
+        return render(request, 'navigation/simulation_page.html', context)
+    except:
+        pass # just let the return below handle it
     # if the level in the GET request was not legitimate, just send the user to
     # the level select page again
     return level_select(request)
 
-# This method decorator disables a safety check that Django does on POST requests.
+# The method decorator below disables a safety check that Django does on POST requests.
 # Given the way we are doing our POST requests, it is much easier to do this than
 # to figure out how to make it work properly. This is fine because we are never
 # intending to deploy this web server to the internet, it is going to be run on
@@ -157,11 +218,33 @@ def play_submit(request):
         level = int(form.data['level'])
         your_name = request.session['username']
         player = Player.objects.get(name=your_name)
-        # TODO: handle all levels (level indexing starts at zero remember)
-        if level == 1:
-            # TODO: maybe check invalid times?
+        if level == 0:
+            if player.time_l0 > your_time:
+                player.time_l0 = your_time
+                player.save()
+        elif level == 1:
             if player.time_l1 > your_time:
                 player.time_l1 = your_time
+                player.save()
+        elif level == 2:
+            if player.time_l2 > your_time:
+                player.time_l2 = your_time
+                player.save()
+        elif level == 3:
+            if player.time_l3 > your_time:
+                player.time_l3 = your_time
+                player.save()
+        elif level == 4:
+            if player.time_l4 > your_time:
+                player.time_l4 = your_time
+                player.save()
+        elif level == 5:
+            if player.time_l5 > your_time:
+                player.time_l5 = your_time
+                player.save()
+        elif level == 6:
+            if player.time_l6 > your_time:
+                player.time_l6 = your_time
                 player.save()
         else:
             raise ValueError("Invalid level passed when submitting user time data.")

@@ -16,3 +16,7 @@ class Player(models.Model):
     time_l0 = models.FloatField(default=999.9)
     time_l1 = models.FloatField(default=999.9)
     time_l2 = models.FloatField(default=999.9)
+    time_l3 = models.FloatField(default=999.9)
+    time_l4 = models.FloatField(default=999.9)
+    time_l5 = models.FloatField(default=999.9)
+    time_l6 = models.FloatField(default=999.9)

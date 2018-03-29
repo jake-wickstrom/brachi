@@ -1,0 +1,13 @@
+To set up and run the Django server locally:
+  1. Make sure you are using Python 3 and that you have Django installed (if not,
+     typing "pip install django" in the Command Line should do the trick).
+  2. Go to the "brachi\django-server\brachi" directory on your local machine and
+     open a Command Line or PowerShell window there.
+  3. If it is your first time running the server, or the first time in a while,
+     type "python manage.py migrate". This will add the appropriate tables to the
+     SQLite database on your machine.
+  4. Type "python manage.py runserver" to start the server. Open your web browser
+     and go to "127.0.0.1:8000/navigation/title" in the address bar. That's it!
+
+To set up and run the server for EVERYONE on the same wifi node as you:
+  1. TODO: finish this!

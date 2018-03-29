@@ -1,5 +1,10 @@
 """
 Place any major constants or global names here.
 """
-# TODO: update with correct level names
-ALL_LEVELS = ['Brachistochrone', 'Brachistochrone^2', 'Level 3']
+ALL_LEVELS = ['Brachistochrone',
+              'Brachistochrone^2',
+              'Half Pipe',
+              'Asteroids',
+              'Charge Pipe',
+              'Green Hill Zone',
+              'Green Hill Zone 2']
