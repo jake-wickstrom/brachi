@@ -20,11 +20,11 @@ interpMode = 'linear'; %pchip is better, but much slower than linear
 %initial KE, setting exactly to 0 causes division by 0 in DEs
 Tinit = 1e-3;
 %start point
-xi = 0;
-yi = 1;
+xi = 0.05;
+yi = 0.5+0.18;
 %end point
-xf = 5;
-yf = -1/2;
+xf = 0.95;
+yf = 0.5-0.09;
 %NOTE: Avoid BCs that are vertical to each other as slope is used for curve fitting
 
 m = abs((yf-yi)/(xf-xi));
@@ -52,8 +52,14 @@ syms x(s) y(s) U(x, y) x2 y2
 % U = sin(x) + sin(y);
 % U2 = sin(x2) + sin(y2);
 
-U = y^2 - x;
-U2 = y2^2 - x2;
+% U = y^2 - x + 1/sqrt((y-0)^2+(x-2.5)^2) - 1/sqrt((y-2)^2+(x-5)^2);
+% U2 = y2^2 - x2 + 1/sqrt((y2-0)^2+(x2-2.5)^2) - 1/sqrt((y2-2)^2+(x2-5)^2);
+
+U = (y-0.5)^2 - x + 1/sqrt((y-0.5)^2+(x-(xf-xi)/2)^2) - 1/sqrt((y-0.5-0.18*2)^2+(x-xf)^2);
+U2 = (y2-0.5)^2 - x2 + 1/sqrt((y2-0.5)^2+(x2-(xf-xi)/2)^2) - 1/sqrt((y2-0.5-0.18*2)^2+(x2-xf)^2);
+
+% U = atan(y/x);
+% U2 = atan(y2/x2);
 
 E = eval(subs(U, [x(s),y(s)], [xi,yi]))+Tinit; %Set initial KE to Tinit
 if eval(subs(U, [x(s),y(s)], [xf,yf])) > E-Tinit
@@ -103,7 +109,7 @@ for theta = dydxStart:dydxInc:dydxEnd
         %find best fit to BCs (based on relative position of start and end points)
         [~,fitIndex] = min( abs( abs((ysolRawInterp(2:end)-yi)./(xsolRawInterp(2:end)-xi)) - m ) );
         [~,~,fitIndices,~] = intersections(xsolRawInterp(2:end),ysolRawInterp(2:end),fitLinex,fitLiney);
-        fitIndices = [round(fitIndices)' fitIndex];
+        fitIndices = unique([round(fitIndices)' fitIndex]);
 %         if numel(fitIndices) > 0
 %             hold on
 %             plot(xsol, ysol, '.');
@@ -149,7 +155,11 @@ for theta = dydxStart:dydxInc:dydxEnd
 %             time = sum( d ./ sqrt(E - ...
 %                 ( ysol(2:end) )) );
             time = sum( d ./ sqrt(E - ...
-                ( (ysol(2:end)).^2 - xsol(2:end) )) );
+                ( (ysol(2:end)-0.5).^2 - xsol(2:end)...
+                + 1./sqrt((ysol(2:end)-0.5).^2+(xsol(2:end)-(xf-xi)/2).^2)...
+                - 1./sqrt((ysol(2:end)-0.5-0.18*2).^2+(xsol(2:end)-xf).^2) )) );
+%             time = sum( d ./ sqrt(E - ...
+%                 ( atan(ysol(2:end)./xsol(2:end)) )) );
 
             if time < tBest && isreal(time)
                 xsolBest = xsol;
@@ -179,13 +189,16 @@ ysol = pt(:,2);
 %time = d/v, v=sqrt(E-U)
 d = sqrt((ysol(2)-ysol(1))^2+(xsol(2)-xsol(1))^2); %interparc generates equidistant points
 tBestSpline = sum( d ./ sqrt(E - ...
-    ( (ysol(2:end)).^2 - xsol(2:end) )) );
+    ( (ysol(2:end)-0.5).^2 - xsol(2:end)...
+    + 1./sqrt((ysol(2:end)-0.5).^2+(xsol(2:end)-(xf-xi)/2).^2)...
+    - 1./sqrt((ysol(2:end)-0.5-0.18*2).^2+(xsol(2:end)-xf).^2) )) );
 xsolBestSpline = xsol;
 ysolBestSpline = ysol;
 
 plot(xsolBest, ysolBest, '.b')
 plot(xsolBestSpline, ysolBestSpline, '.g')
 plot([xi xf], [yi yf], 'ob')
-fcontour(U2, [-1, 6, -2, 2])
+fcontour(U2, [0, 1, 0, 1])
 csvwrite('trajectory.csv',[xsolBest ysolBest])
+csvwrite('trajectory-spline.csv',[xsolBestSpline ysolBestSpline])
 warning on
