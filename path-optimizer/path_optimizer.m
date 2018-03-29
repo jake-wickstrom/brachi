@@ -110,24 +110,6 @@ for theta = dydxStart:dydxInc:dydxEnd
         [~,fitIndex] = min( abs( abs((ysolRawInterp(2:end)-yi)./(xsolRawInterp(2:end)-xi)) - m ) );
         [~,~,fitIndices,~] = intersections(xsolRawInterp(2:end),ysolRawInterp(2:end),fitLinex,fitLiney);
         fitIndices = unique([round(fitIndices)' fitIndex]);
-%         if numel(fitIndices) > 0
-%             hold on
-%             plot(xsol, ysol, '.');
-%             plot(xsol(fitIndices), ysol(fitIndices), 'o');
-%             plot(fitLinex, fitLiney);
-%             if xsol(end) > xsol(1) 
-%                 xlim([xsol(1)-abs(xsol(1)*0.1) xsol(end)+abs(xsol(1)*0.1)])
-%             else
-%                 xlim([xsol(end)-abs(xsol(1)*0.1) xsol(1)+abs(xsol(1)*0.1)])
-%             end
-%             if ysol(end) > ysol(1) 
-%                 ylim([ysol(1)-abs(ysol(1)*0.1) ysol(end)+abs(ysol(1)*0.1)])
-%             else
-%                 ylim([ysol(end)-abs(ysol(1)*0.1) ysol(1)+abs(ysol(1)*0.1)])
-%             end
-%             pause
-%             close all
-%         end
         for fitIndex = fitIndices
             if fitIndex + 1 > numel(xsolRawInterp)
                 fitIndex = fitIndex - 1;
