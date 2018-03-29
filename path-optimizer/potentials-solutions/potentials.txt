@@ -1,3 +1,4 @@
 Halfpipe with charges:
-
+	initial: [0.05 0.68]
+	finial:  [0.95 0.41]
 	U = (y-0.5)^2 - x + 1/sqrt((y-0.5)^2+(x-(xf-xi)/2)^2) - 1/sqrt((y-0.5-0.18*2)^2+(x-xf)^2)
