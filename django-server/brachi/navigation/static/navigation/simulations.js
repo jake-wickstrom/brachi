@@ -9,11 +9,15 @@ const NUM_SPLINE_POINTS = 1000;
 const ENDPOINT_CIRCLE_RADIUS = 15;
 const CANVAS_SIZE_SCALE = 0.7;
 
-// these start values to be written by server on file init
+// below values edited by server
+const CONTOUR_IMAGE = "https://github.com/jake-wickstrom/brachi/blob/scale-gui/images/brachi.png?raw=true";
+const CONTOUR_IMAGE_OPT = "https://github.com/jake-wickstrom/brachi/blob/scale-gui/images/brachi-optimal.png?raw=true";
+
 const XI_SCALE = 0.1;
 const YI_SCALE = 0.9;
 const XF_SCALE = 0.9;
 const YF_SCALE = 0.1;
+// above values edited by server
 
 var mouseDownFlag = false;
 var canvas = document.getElementById("simCanvas");
@@ -37,10 +41,9 @@ var finePath;
 
 var formIndex = 0;
 
-$(document).ready(function() {
-  console.log('x start: ' + X_START + ' - y start: ' + Y_START);
-  console.log('x end: ' + X_END  + ' - y end: ' +  Y_END);
+document.getElementById('simCanvas').style.backgroundImage="url(" + CONTOUR_IMAGE + ")";
 
+$(document).ready(function() {
   var endPoints = new EndPoints(X_START, Y_START, X_END, Y_END);
   endPoints.draw();
 
@@ -57,6 +60,7 @@ $(document).ready(function() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     endPoints.draw();
     document.getElementById('error-display').innerHTML = "Draw a path that starts and ends in the given circles";
+    document.getElementById('simCanvas').style.backgroundImage="url(" + CONTOUR_IMAGE + ")";
     runAnimation = false;
     xpoints = [];
     ypoints = [];
@@ -77,7 +81,7 @@ $(document).ready(function() {
   });
 
   document.getElementById("solnButton").addEventListener("click", function() {
-    document.getElementById('simCanvas').style.backgroundImage="url(https://github.com/jake-wickstrom/brachi/blob/scale-gui/images/brachi-optimal.png?raw=true)";
+    document.getElementById('simCanvas').style.backgroundImage="url(" + CONTOUR_IMAGE_OPT + ")";
     document.getElementById('opt-time').innerHTML = "Optimal Time: " + 1111 + " s";
   });
 
