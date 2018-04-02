@@ -220,14 +220,17 @@ li div:hover {
     float: left;
     display: block;
     color: white;
-    font-size: 20px;
+    cursor: pointer;
+    font-size: 60px;
     width: auto;
     font-family: 'Lato', sans-serif;
     text-align: center;
     text-decoration: none;
-    border-style:outset;
+    border-style: outset;
     border-width: 1px;
     border-color: white;
+    padding-left: 30%;
+    padding-right: 30%;
     background-color: black;
   }
   .leader:hover {

@@ -4,8 +4,10 @@ To set up and run the Django server locally:
   2. Go to the "brachi\django-server\brachi" directory on your local machine and
      open a Command Line or PowerShell window there.
   3. If it is your first time running the server, or the first time in a while,
-     type "python manage.py migrate". This will add the appropriate tables to the
-     SQLite database on your machine.
+     go to "brachi\django-server\brachi\navigation\urls.py" and comment out everything
+     under AND including the "existing_names" variable (you should uncomment it
+     after finishing all steps). In the command line, type "python manage.py migrate".
+     This will add the appropriate tables to the SQLite database on your machine.
   4. Type "python manage.py runserver" to start the server. Open your web browser
      and go to "127.0.0.1:8000/navigation/title" in the address bar. That's it!
 

@@ -26,7 +26,7 @@
     </ul>
     <ul class="level">
       {% for level in levels %}
-      <li><div onclick="gotoLevel({{ forloop.counter0 }})">{{ level }}</div></li>
+      <li><div onclick="gotoLevel({{ forloop.counter0 }})">{{ forloop.counter0 }}: {{ level }}</div></li>
       {% endfor %}
     </ul>
   </body>
