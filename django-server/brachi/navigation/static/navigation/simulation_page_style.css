@@ -1,7 +1,7 @@
 canvas {
   border: 1px solid black;
   background-color: rgb(250, 250, 250);
-  //background-image: url(https://github.com/jake-wickstrom/brachi/blob/scale-gui/images/test.png?raw=true);
+  background-image: url(https://github.com/jake-wickstrom/brachi/blob/scale-gui/images/brachi.png?raw=true);
   background-size: 100% 100%;
 }
 
@@ -25,7 +25,16 @@ body {
   //border: 1px solid black;
   width: 30%;
   padding: 5%;
-  margin-bottom: 20%;
+  margin-bottom: 0%;
+}
+
+#opt-time {
+  font-family: 'Indie Flower', cursive;
+  font-size: 25px;
+  //border: 1px solid black;
+  width: 30%;
+  padding: 5%;
+  margin-bottom: 10%;
 }
 
 #buttons {

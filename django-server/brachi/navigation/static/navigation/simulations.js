@@ -77,7 +77,8 @@ $(document).ready(function() {
   });
 
   document.getElementById("solnButton").addEventListener("click", function() {
-    // TODO: show optimal solution
+    document.getElementById('simCanvas').style.backgroundImage="url(https://github.com/jake-wickstrom/brachi/blob/scale-gui/images/brachi-optimal.png?raw=true)";
+    document.getElementById('opt-time').innerHTML = "Optimal Time: " + 1111 + " s";
   });
 
   document.getElementById("backButton").addEventListener("click", function() {
