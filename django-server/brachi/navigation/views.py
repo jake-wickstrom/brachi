@@ -307,4 +307,4 @@ def project(request):
     if checkValidSession(request) == False:
         return title(request, session_error=True)
     context = {}
-    return render(request, 'navigation/project.html', context)
+    return render(request, 'navigation/about.html', context)
