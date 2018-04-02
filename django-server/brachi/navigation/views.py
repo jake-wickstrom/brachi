@@ -223,31 +223,31 @@ def play_submit(request):
         your_name = request.session['username']
         player = Player.objects.get(name=your_name)
         if level == 0:
-            if player.time_l0 > your_time:
+            if player.time_l0 > your_time and player.solution_seen_l0 == False:
                 player.time_l0 = your_time
                 player.save()
         elif level == 1:
-            if player.time_l1 > your_time:
+            if player.time_l1 > your_time and player.solution_seen_l1 == False:
                 player.time_l1 = your_time
                 player.save()
         elif level == 2:
-            if player.time_l2 > your_time:
+            if player.time_l2 > your_time and player.solution_seen_l2 == False:
                 player.time_l2 = your_time
                 player.save()
         elif level == 3:
-            if player.time_l3 > your_time:
+            if player.time_l3 > your_time and player.solution_seen_l3 == False:
                 player.time_l3 = your_time
                 player.save()
         elif level == 4:
-            if player.time_l4 > your_time:
+            if player.time_l4 > your_time and player.solution_seen_l4 == False:
                 player.time_l4 = your_time
                 player.save()
         elif level == 5:
-            if player.time_l5 > your_time:
+            if player.time_l5 > your_time and player.solution_seen_l5 == False:
                 player.time_l5 = your_time
                 player.save()
         elif level == 6:
-            if player.time_l6 > your_time:
+            if player.time_l6 > your_time and player.solution_seen_l6 == False:
                 player.time_l6 = your_time
                 player.save()
         else:
@@ -257,6 +257,48 @@ def play_submit(request):
     # This return will not refresh or reload the page the user is on if used with
     # a proper ajax call.
     return HttpResponse(json.dumps({'message': 'Time submitted.'}), content_type = 'application/json')
+
+"""
+Handles the POST request generated when a user views the solution to a level.
+Viewing the solution sets a flag in the database that will prevent the user from
+submitting any more times for that level.
+"""
+@method_decorator(csrf_exempt)
+def play_solution(request):
+    if checkValidSession(request) == False:
+        return title(request, session_error=True)
+    try:
+        level = int(request.POST['level'])
+        your_name = request.session['username']
+        player = Player.objects.get(name=your_name)
+        if level == 0:
+            player.solution_seen_l0 = True
+            player.save()
+        elif level == 1:
+            player.solution_seen_l1 = True
+            player.save()
+        elif level == 2:
+            player.solution_seen_l2 = True
+            player.save()
+        elif level == 3:
+            player.solution_seen_l3 = True
+            player.save()
+        elif level == 4:
+            player.solution_seen_l4 = True
+            player.save()
+        elif level == 5:
+            player.solution_seen_l5 = True
+            player.save()
+        elif level == 6:
+            player.solution_seen_l6 = True
+            player.save()
+        else:
+            raise ValueError("Invalid level passed when requesting solution.")
+    except:
+        return title(request, session_error=True)
+    # This return will not refresh or reload the page the user is on if used with
+    # a proper ajax call.
+    return HttpResponse(json.dumps({'message': 'Solution viewed.'}), content_type = 'application/json')
 
 """
 Distributes the project description page.
