@@ -9,6 +9,12 @@ const NUM_SPLINE_POINTS = 1000;
 const ENDPOINT_CIRCLE_RADIUS = 15;
 const CANVAS_SIZE_SCALE = 0.7;
 
+// these start values to be written by server on file init
+const XI_SCALE = 0.1;
+const YI_SCALE = 0.9;
+const XF_SCALE = 0.9;
+const YF_SCALE = 0.1;
+
 var mouseDownFlag = false;
 var canvas = document.getElementById("simCanvas");
 var ctx = canvas.getContext("2d");
@@ -16,10 +22,10 @@ var ctx = canvas.getContext("2d");
 canvas.width = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
 canvas.height = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
 
-const X_START = 0.1 * canvas.width;
-const Y_START = canvas.height - 0.9 * canvas.height;
-const X_END = 0.9 * canvas.width;
-const Y_END = canvas.height - 0.1 * canvas.height;
+const X_START = XI_SCALE * canvas.width;
+const Y_START = canvas.height - YI_SCALE * canvas.height;
+const X_END = XF_SCALE * canvas.width;
+const Y_END = canvas.height - YF_SCALE * canvas.height;
 
 // arrays of unfiltered x and y points captured during mouse movement
 var xpoints = [];
@@ -32,8 +38,8 @@ var finePath;
 var formIndex = 0;
 
 $(document).ready(function() {
-  console.log('x start: ' + X_START + ' ---- y start: ' + Y_START);
-  console.log('x end: ' + X_END  + ' ---- y end: ' +  Y_END);
+  console.log('x start: ' + X_START + ' - y start: ' + Y_START);
+  console.log('x end: ' + X_END  + ' - y end: ' +  Y_END);
 
   var endPoints = new EndPoints(X_START, Y_START, X_END, Y_END);
   endPoints.draw();
@@ -68,6 +74,10 @@ $(document).ready(function() {
       marble.startTimer();
       animate();
     }
+  });
+
+  document.getElementById("solnButton").addEventListener("click", function() {
+    // TODO: show optimal solution
   });
 
   document.getElementById("backButton").addEventListener("click", function() {

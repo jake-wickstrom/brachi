@@ -1,7 +1,7 @@
 canvas {
   border: 1px solid black;
   background-color: rgb(250, 250, 250);
-  //background-image: url(https://pre00.deviantart.net/25c4/th/pre/i/2013/169/f/c/yellow_lined_paper_by_andie200-d69jqez.png);
+  //background-image: url(https://github.com/jake-wickstrom/brachi/blob/scale-gui/images/test.png?raw=true);
   background-size: 100% 100%;
 }
 
@@ -29,8 +29,8 @@ body {
 }
 
 #buttons {
-  margin-top: 10%;
-  margin-bottom: 10%;
+  margin-top: 5%;
+  margin-bottom: 5%;
 }
 
 #startButton {
@@ -58,3 +58,13 @@ body {
   width: 30%;
   background-color: rgba(0, 0, 0, 0);
   border: 0px;
+}
+
+#solnButton {
+  font-family: 'Indie Flower', cursive;
+  font-size: 25px;
+  height: 100%;
+  width: 30%;
+  background-color: rgba(0, 0, 0, 0);
+  border: 0px;
+}
