@@ -1,0 +1,268 @@
+@import url('https://fonts.googleapis.com/css?family=Lato|Vollkorn');
+
+/* 1. Navigation Bar and Overall Page Style*/
+
+/* i) Headers, Background, General Text */
+
+header {
+position: fixed;
+font-family: 'Lato', sans-serif;
+font-size: 70px;
+left: 10px;
+top: 0px;
+}
+
+body {
+  background-position: top;
+  top: 0px;
+  background-image: url("VectorField.svg");
+  color: white;
+  font-family: 'Lato', sans-serif;
+  font-size: 20;
+}
+
+/* Navigation */
+
+.nav {
+  list-style-type: none;
+  margin: 0;
+  position: fixed;
+  right: 0px;
+  left: 0px;
+  top: 0px;
+  padding: 0;
+  background-color: #000000;
+}
+.level {
+   list-style-type: none;
+   position: fixed;
+   margin: 0;
+   padding: 0;
+   right: 25%;
+   top: 20%;
+   height: 462px;
+   width: 50%;
+   background-color: #000000;
+}
+
+.nav li{
+  float: right;
+}
+
+
+.level a{
+  display: block;
+  color: white;
+  font-size: 20px;
+  padding: 20px 30px;
+  font-family: 'Lato', sans-serif;
+  text-align: center;
+  text-decoration: none;
+  border-style:outset;
+  border-width: 1px;
+  border-color: white;
+
+}
+
+.nav a{
+  display: block;
+  color: white;
+  font-size: 20px;
+  font-family: 'Lato', sans-serif;
+  text-align: center;
+  padding: 30px 30px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #111;
+}
+
+.login {
+  list-style-type: none;
+  padding-left: 0px;
+}
+.login a{
+  float: center;
+  text-decoration: none;
+}
+
+.leaderboard {
+  position: absolute;
+  top: 15%;
+  background-color: black;
+  border-style: solid;
+  border-width: 1px;
+  border-color: white;
+  width: auto;
+  left: 25%;
+  bottom: 5%;
+}
+.previous {
+  float: left;
+  display: block;
+  color: white;
+  font-size: 20px;
+  padding: 15px 30px;
+  font-family: 'Lato', sans-serif;
+  text-align: center;
+  text-decoration: none;
+  border-style:outset;
+  border-width: 1px;
+  border-color: white;
+
+}
+
+.next {
+    float: right;
+    display: block;
+    color: white;
+    font-size: 20px;
+    padding: 15px 30px;
+    font-family: 'Lato', sans-serif;
+    text-align: center;
+    text-decoration: none;
+    border-style:outset;
+    border-width: 1px;
+    border-color: white;
+}
+
+
+
+
+#aboutContainer {
+  position: absolute;
+  top: 15%;
+  background-color: black;
+  width: 50%;
+  float: center;
+  left: 25%;
+  bottom: 5%;
+  padding: 10px 10px 10px;
+  border-style: solid;
+  border-color: white;
+  border-width: 1px;
+
+}
+
+#loginContainer {
+  position: relative;
+  top: 290px;
+}
+#simulationInterfaceContainer {
+  position: fixed;
+  right: 0px;
+  top:84px;
+  height: 100%;
+  width: 30%;
+  background-color: #2C3539;
+}
+#ballCanvas {
+    position: fixed;
+    top: 200px;
+    left: 50%;
+    height: 300px;
+  }
+
+#simulationCanvas {
+    position: fixed;
+    top: 84px;
+    left: 0px;
+    background-color: white;
+    height: 100%;
+    width: 70%
+  }
+#ball {
+    position: absolute;
+    left: 0;
+    bottom: 80%;
+    width: 1em;
+    height: 1em;
+    border-radius: 0.5em;
+  }
+  #ball { background: red;
+  }
+  input[type=text] {
+      border-radius: 25px;
+      width: 20%;
+      padding: 14px 20px;
+      margin: 8px 0;
+      display: inline-block;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+      float: center;
+  }
+  #info-display {
+    font-family: 'Indie Flower', cursive;
+    font-size: 25px;
+    //border: 1px solid black;
+    width: 30%;
+    padding: 5%;
+    margin-bottom: 20%;
+  }
+
+  .leader {
+    float: left;
+    color: white;
+    padding: 15px 40px;
+    font-size: 20px;
+    width: auto;
+    font-family: 'Lato', sans-serif;
+    text-align: center;
+    border-style:outset;
+    border-width: 1px;
+    border-color: white;
+    background-color: black;
+  }
+
+  .leader:hover {
+    cursor: pointer;
+    cursor: hand;
+    background-color: #111;
+  }
+
+
+
+  #buttons {
+    margin-top: 10%;
+    margin-bottom: 10%;
+  }
+  #startButton {
+    font-family: 'Indie Flower', cursive;
+    font-size: 25px;
+    height: 100%;
+    width: 30%;
+    background-color: rgba(0, 0, 0, 0);
+    border: 0px;
+  }
+
+  #resetButton {
+    font-family: 'Indie Flower', cursive;
+    font-size: 25px;
+    height: 100%;
+    width: 30%;
+    background-color: rgba(0, 0, 0, 0);
+    border: 0px;
+  }
+
+  #backButton {
+    font-family: 'Indie Flower', cursive;
+    font-size: 25px;
+    height: 100%;
+    width: 30%;
+    background-color: rgba(0, 0, 0, 0);
+    border: 0px;
+  }
+  #loginButton {
+      font-family: 'Lato', sans-serif;
+      border-radius: 25px;
+      background-color: red ;
+      color: white;
+      padding: 14px 10px;
+      border: none;
+      cursor: pointer;
+      width: 60px;
+  }
+  #loginButton:hover {
+    opacity: 0.8;
+  }

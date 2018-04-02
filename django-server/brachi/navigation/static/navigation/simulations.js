@@ -23,11 +23,9 @@ var mouseDownFlag = false;
 var canvas = document.getElementById("simCanvas");
 var ctx = canvas.getContext("2d");
 
-// canvas.width = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
-// canvas.height = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
+canvas.width = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
+canvas.height = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
 
-canvas.height = $('#simCanvas').width();
-canvas.width = $('#simCanvas').width();
 
 const X_START = XI_SCALE * canvas.width;
 const Y_START = canvas.height - YI_SCALE * canvas.height;
@@ -58,10 +56,9 @@ $(document).ready(function() {
   document.getElementById('simCanvas').addEventListener('mouseup', mouseUp);
   //document.getElementById('simCanvas').addEventListener('mouseout', mouseUp); //TODO: fix this so it doesn't affect the animation
   window.addEventListener('resize', function() {
-    // // canvas.width = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
-    // canvas.height = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
-    canvas.height = $('#simCanvas').width();
-    canvas.width = $('#simCanvas').width();
+    canvas.width = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
+    canvas.height = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
+
 
   });
 

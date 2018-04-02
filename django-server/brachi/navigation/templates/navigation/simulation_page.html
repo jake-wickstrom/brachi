@@ -11,61 +11,12 @@
   <link href="https://fonts.googleapis.com/css?family=Indie+Flower" rel="stylesheet">
 </head>
 
+
+
 <body>
-  <ul class="nav">
-    <header>Brachi</header>
-    <li><a href="about.html">About</a></li>
-    <li><a href="leaderboard.html">Leaderboard</a></li>
-    <li><a href="levelSelector.html">Levels</a></li>
-    <li><a href="frontpage.html">Logout</a></li>
-  </ul>
-  <canvas id="simCanvas"></canvas>
-  <div id="simulationInterfaceContainer">
-    <div id="error-display">
-      <p>Draw a path that starts and ends in the given circles</p>
-    </div>
-    <div class="row"  id="info-display">
-      <p>Your Time: Infinity s</p>
-    </div>
-    <div class="row" id="opt-time">
-      <p>Optimal Time: N/A</p>
-    </div>
-    <div class="row" id="buttons">
-      <button type="button" id="startButton">Start</button>
-    </div>
-    <div class="row" id="buttons">
-      <button type="button" id="resetButton">Reset</button>
-    </div>
-    <div class="row" id="buttons">
-      <button type="button" id="solnButton">Show Solution</button>
-    </div>
-    <div class="row" id="buttons">
-      <button type="button" id="backButton">Back</button>
-    </div>
-  </div>
-  {% autoescape off %}
-  {{ script }}
-  {% endautoescape %}
-  <script>
-    var level = {{ level }};
-  </script>
-  <script src="{% static 'navigation/simulations.js' %}"></script>
-</body>
-
-</html>
-
-
-<!-- <body>
   <div class="container-fluid">
     <div class="row">
     <div class="row">
-      <ul class="nav">
-        <header>Brachi</header>
-        <li><a href="about.html">About</a></li>
-        <li><a href="leaderboard.html">Leaderboard</a></li>
-        <li><a href="levelSelector.html">Levels</a></li>
-        <li><a href="frontpage.html">Logout</a></li>
-      </ul>
     </div>
     <div class="row">
       <div class="col-sm-6 col-md-6 col-lg-6" id="canvasCol">
