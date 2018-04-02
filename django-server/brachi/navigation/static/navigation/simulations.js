@@ -1,23 +1,25 @@
-const GRAV = 9.81;
-const M = 1;
+const GRAV = 0.5;
+const M = 2;
+const T0 = 0.000001;
 const MARBLE_RADIUS = 5;
 const FILTER_INTERVAL = 20;
-const TIMESCALE = 4;
+const TIMESCALE = 1;
 const DISTANCE_FILTER = 20;
 const NUM_SPLINE_POINTS = 1000;
 const ENDPOINT_CIRCLE_RADIUS = 15;
-// Below values are to be modified by backend depending on level sleceted
-const X_START = 20;
-const Y_START = 20;
-const X_END = 450;
-const Y_END = 450;
+const CANVAS_SIZE_SCALE = 0.7;
 
 var mouseDownFlag = false;
 var canvas = document.getElementById("simCanvas");
 var ctx = canvas.getContext("2d");
 
-canvas.width = $('#canvasCol').width();
-canvas.height = $('#canvasCol').width();
+canvas.width = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
+canvas.height = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
+
+const X_START = 0.1 * canvas.width;
+const Y_START = canvas.height - 0.9 * canvas.height;
+const X_END = 0.9 * canvas.width;
+const Y_END = canvas.height - 0.1 * canvas.height;
 
 // arrays of unfiltered x and y points captured during mouse movement
 var xpoints = [];
@@ -30,6 +32,9 @@ var finePath;
 var formIndex = 0;
 
 $(document).ready(function() {
+  console.log('x start: ' + X_START + ' ---- y start: ' + Y_START);
+  console.log('x end: ' + X_END  + ' ---- y end: ' +  Y_END);
+
   var endPoints = new EndPoints(X_START, Y_START, X_END, Y_END);
   endPoints.draw();
 
@@ -38,8 +43,8 @@ $(document).ready(function() {
   document.getElementById('simCanvas').addEventListener('mouseup', mouseUp);
   //document.getElementById('simCanvas').addEventListener('mouseout', mouseUp); //TODO: fix this so it doesn't affect the animation
   window.addEventListener('resize', function() {
-    canvas.width = $('#canvasCol').width();
-    canvas.height = $('#canvasCol').width();
+    canvas.width = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
+    canvas.height = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
   });
 
   document.getElementById("resetButton").addEventListener("click", function() {
@@ -242,21 +247,23 @@ function EndPoints(x0, y0, xf, yf) {
 }
 
 function simulate(path) {
-  var v0 = 0;
   var t = 0;
   var times = [];
   var directions = [];
   var movingForward = true;
-  var u0 = M * GRAV * invY(path.ypath[0]);
-  var k0 = 0.5 * M * v0 * v0;
+  var u0 = getPotential(normX(path.xpath[0]), normY(path.ypath[0]));
   times.push(0);
   directions.push(true);
 
   for (var i = 1; i < path.ypath.length; i++) {
-    var u = M * GRAV * invY(path.ypath[i]); // TODO: change this so it calls a poptential energy function
+    var u = getPotential(normX(path.xpath[i]), normY(path.ypath[i]));
     //var dy = invY(path.ypath[i]) - invY(path.ypath[i - 1]);
-    var ds = path.arclen[i] - path.arclen[i - 1];
-    var vSqr = (u0 - u + k0) * 2 / M;
+    //var ds = path.arclen[i] - path.arclen[i - 1];
+    // x and y ard normalized so that they are between 0 and 1
+    var dx = normX(path.xpath[i]) - normX(path.xpath[i - 1]);
+    var dy = normY(path.ypath[i]) - normY(path.ypath[i - 1]);
+    var ds = Math.sqrt(dx * dx + dy * dy);
+    var vSqr = (u0 - u + T0) * 2 / M;
     var dt;
 
     if (vSqr > 0) {
@@ -266,12 +273,11 @@ function simulate(path) {
         directions.push(false);
       }
 
-      //dt = Math.sqrt((DX * DX + dy * dy) / vSqr);
       dt = ds / Math.sqrt(vSqr);
     } else if (vSqr <= 0) {
       directions.push(false);
       movingForward = false;
-      dt = 0; //TODO: this might be wrong
+      dt = 0;
       t = Number.POSITIVE_INFINITY;
       break;
     }
@@ -398,18 +404,19 @@ function connectPoints(x1, y1, x2, y2) {
   ctx.stroke();
 }
 
-// inverts y values such that direction of y-axis is flipped
-function invY(y) {
-  return canvas.height - y;
+// returns potential at given x and y and scales for x and y values between [0, 1]
+function getPotential(x, y) {
+  return M * GRAV * y;
 }
 
-function sleep(milliseconds) {
-  var start = new Date().getTime();
-  while (true) {
-    if ((new Date().getTime() - start) > milliseconds) {
-      break;
-    }
-  }
+// inverts y values such that direction of y-axis is flipped and normalized them between 0 and 1
+function normY(y) {
+  return (canvas.height - y) / canvas.height;
+}
+
+// normalizes x values between 0 and 1
+function normX(x) {
+  return x / canvas.width;
 }
 
 // Some of below code modified from https://github.com/morganherlocker/cubic-spline
