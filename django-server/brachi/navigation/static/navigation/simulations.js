@@ -23,8 +23,11 @@ var mouseDownFlag = false;
 var canvas = document.getElementById("simCanvas");
 var ctx = canvas.getContext("2d");
 
-canvas.width = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
-canvas.height = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
+// canvas.width = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
+// canvas.height = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
+
+canvas.height = $('#simCanvas').width();
+canvas.width = $('#simCanvas').width();
 
 const X_START = XI_SCALE * canvas.width;
 const Y_START = canvas.height - YI_SCALE * canvas.height;
@@ -44,6 +47,9 @@ var formIndex = 0;
 document.getElementById('simCanvas').style.backgroundImage="url(" + CONTOUR_IMAGE + ")";
 
 $(document).ready(function() {
+  console.log(canvas.width);
+  console.log(canvas.height);
+
   var endPoints = new EndPoints(X_START, Y_START, X_END, Y_END);
   endPoints.draw();
 
@@ -52,8 +58,11 @@ $(document).ready(function() {
   document.getElementById('simCanvas').addEventListener('mouseup', mouseUp);
   //document.getElementById('simCanvas').addEventListener('mouseout', mouseUp); //TODO: fix this so it doesn't affect the animation
   window.addEventListener('resize', function() {
-    canvas.width = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
-    canvas.height = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
+    // // canvas.width = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
+    // canvas.height = $('#canvasCol').width() * CANVAS_SIZE_SCALE;
+    canvas.height = $('#simCanvas').width();
+    canvas.width = $('#simCanvas').width();
+
   });
 
   document.getElementById("resetButton").addEventListener("click", function() {

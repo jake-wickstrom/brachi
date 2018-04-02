@@ -5,9 +5,95 @@ canvas {
   background-size: 100% 100%;
 }
 
+header {
+position: fixed;
+font-family: 'Lato', sans-serif;
+color: white;
+font-size: 70px;
+left: 10px;
+top: 0px;
+}
+
 body {
-  background-image: url(https://img-new.cgtrader.com/items/101046/026436c913/office-workstation-design-3d-model-sldprt-sldasm-slddrw.jpg);
-  background-size: 100% 100%;
+  background-position: top;
+  top: 0px;
+  background-image: url("VectorField.svg");
+  color: white;
+  font-family: 'Lato', sans-serif;
+  font-size: 20;
+}
+.nav {
+  list-style-type: none;
+  margin: 0;
+  position: fixed;
+  font-size: 30px;
+  right: 0px;
+  left: 0px;
+  top: 0px;
+  padding: 20px;
+  background-color: #000000;
+}
+.level {
+   list-style-type: none;
+   position: fixed;
+   margin: 0;
+   padding: 0;
+   right: 25%;
+   top: 20%;
+   height: 462px;
+   width: 50%;
+   background-color: #000000;
+}
+
+.nav li{
+  float: right;
+}
+
+
+.level a{
+  display: block;
+  color: white;
+  font-size: 20px;
+  padding: 20px 30px;
+  font-family: 'Lato', sans-serif;
+  text-align: center;
+  text-decoration: none;
+  border-style:outset;
+  border-width: 1px;
+  border-color: white;
+
+}
+
+.nav a{
+  display: block;
+  color: white;
+  font-size: 20px;
+  font-family: 'Lato', sans-serif;
+  text-align: center;
+  padding: 30px 30px;
+  text-decoration: none;
+}
+
+li a:hover {
+  background-color: #111;
+}
+
+#simCanvas {
+  position: fixed;
+  top: 84px;
+  left: 0px;
+  bottom: 0px;
+  background-color: white;
+}
+
+#simulationInterfaceContainer {
+  position: fixed;
+  right: 0px;
+  top:84px;
+  height: 100%;
+  width: 30%;
+
+  background-color: #2C3539;
 }
 
 #canvasCol {
@@ -15,13 +101,15 @@ body {
 }
 
 #error-display {
-  font-family: 'Indie Flower', cursive;
-  font-size: 25px;
+  color: white;
+  font-family: 'Lato', sans-serif;
+  font-size: 20px;
 }
 
 #info-display {
-  font-family: 'Indie Flower', cursive;
-  font-size: 25px;
+  font-family: 'Lato', sans-serif;
+  font-size: 20px;
+  color: white;
   //border: 1px solid black;
   width: 30%;
   padding: 5%;
@@ -29,8 +117,9 @@ body {
 }
 
 #opt-time {
-  font-family: 'Indie Flower', cursive;
-  font-size: 25px;
+  color: white;
+  font-family: 'Lato', sans-serif;
+  font-size: 20px;
   //border: 1px solid black;
   width: 30%;
   padding: 5%;
@@ -38,31 +127,34 @@ body {
 }
 
 #buttons {
-  margin-top: 5%;
-  margin-bottom: 5%;
+  color: white;
+  margin-left: 0px;
+  margin-right: 0px;
+  text-align: center;
+  border-style: solid;
+  width: 100%;
+  border-width: 1px;
 }
 
 #startButton {
-  font-family: 'Indie Flower', cursive;
-  font-size: 25px;
+  font-family: 'Lato', sans-serif;
+  font-size: 20px;
   height: 100%;
-  width: 30%;
+  width: 100px;
   background-color: rgba(0, 0, 0, 0);
   border: 0px;
 }
 
 #resetButton {
-  font-family: 'Indie Flower', cursive;
-  font-size: 25px;
-  height: 100%;
-  width: 30%;
-  background-color: rgba(0, 0, 0, 0);
+  font-family: 'Lato', sans-serif;
+  font-size: 20px;
+  background-color: rgba(0, 0, 0, 0); ;
   border: 0px;
 }
 
 #backButton {
-  font-family: 'Indie Flower', cursive;
-  font-size: 25px;
+  font-family: 'Lato', sans-serif;
+  font-size: 20px;
   height: 100%;
   width: 30%;
   background-color: rgba(0, 0, 0, 0);
@@ -70,8 +162,8 @@ body {
 }
 
 #solnButton {
-  font-family: 'Indie Flower', cursive;
-  font-size: 25px;
+  font-family: 'Lato', sans-serif;
+  font-size: 20px;
   height: 100%;
   width: 30%;
   background-color: rgba(0, 0, 0, 0);
