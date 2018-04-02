@@ -9,6 +9,8 @@ ALL_LEVELS = ['Brachistochrone',
               'Green Hill Zone',
               'Green Hill Zone 2']
 
+IDEAL_TIMES = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
+
 # TODO: fill these links up for each level
 LEVEL_IMAGES = ['some link',
                 'some link',

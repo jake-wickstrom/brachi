@@ -38,12 +38,14 @@ def title(request, invalid_name=False, session_error=False):
     context['invalid_name'] = invalid_name
     context['session_error'] = session_error
     existing_names = Player.objects.values_list('name', flat=True)
-    # TODO: update to fastest possible (or something) times given by algorithm
+    # adds a few wacky characters to the database if they do not already exist,
+    # this is the best place to put these such that they are added relatively soon
+    # to startup
     if 'Sonic the Hedgehog' not in existing_names:
-        sonic = Player(name='Sonic the Hedgehog', time_l0=2.0, time_l1=2.0, time_l2=2.0, time_l3=2.0, time_l4=2.0, time_l5=2.0, time_l6=2.0)
+        sonic = Player(name='Sonic the Hedgehog', time_l0=IDEAL_TIMES[0]+0.14, time_l1=IDEAL_TIMES[1]+0.21, time_l2=IDEAL_TIMES[2]+0.05, time_l3=IDEAL_TIMES[3]+0.2, time_l4=IDEAL_TIMES[4]+0.17, time_l5=IDEAL_TIMES[5]+0.01, time_l6=IDEAL_TIMES[6]+0.01)
         sonic.save()
     if 'Daymon' not in existing_names:
-        daymon = Player(name='Daymon', time_l0=1.0, time_l1=1.0, time_l2=1.0, time_l3=1.0, time_l4=1.0, time_l5=1.0, time_l6=1.0)
+        daymon = Player(name='Daymon', time_l0=IDEAL_TIMES[0], time_l1=IDEAL_TIMES[1], time_l2=IDEAL_TIMES[2], time_l3=IDEAL_TIMES[3], time_l4=IDEAL_TIMES[4], time_l5=IDEAL_TIMES[5], time_l6=IDEAL_TIMES[6])
         daymon.save()
     return render(request, 'navigation/frontpage.html', context)
 
