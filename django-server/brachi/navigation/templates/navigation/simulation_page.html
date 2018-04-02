@@ -40,7 +40,10 @@
   {{ script }}
   {% endautoescape %}
   <script>
-    // TODO: add 'constants' for starting points of levels
+    var xi_scale = {{ start_point.0 }};
+    var yi_scale = {{ start_point.1 }};
+    var xf_scale = {{ end_point.0 }};
+    var yf_scale = {{ end_point.1 }};
     var level = {{ level }};
   </script>
   <script src="{% static 'navigation/simulations.js' %}"></script>

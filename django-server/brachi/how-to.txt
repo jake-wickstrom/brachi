@@ -9,5 +9,17 @@ To set up and run the Django server locally:
   4. Type "python manage.py runserver" to start the server. Open your web browser
      and go to "127.0.0.1:8000/navigation/title" in the address bar. That's it!
 
-To set up and run the server for EVERYONE on the same wifi node as you:
-  1. TODO: finish this!
+To set up and run the server for EVERYONE on the same Wi-Fi node as you:
+  1. Make sure you are on the wifi network that you want to deploy the server to.
+  2. Find the IPv4 address of the server; in Windows you can click the wifi symbol
+     in the bar at the bottom of the screen and click Properties on the wifi you
+     are connected to.
+  3. Go to "brachi\django-server\brachi\brachi\settings.py" and scroll down to
+     the "ALLOWED_HOSTS" variable and add the IPv4 address to the list. It should
+     now look something like: "ALLOWED_HOSTS = ['128.189.231.64']" but with your
+     IPv4 address. Some routers may need to be configured to work with the server,
+     but as of March 2018 "ubcsecure" works just fine.
+  4. In the command line, type: "python manage.py runserver 0.0.0.0:8000" to
+     run the server (this SHOULD be all zeroes NOT the IPv4 address of the router).
+  5. Anyone on the same wifi network can now go to the following url to access
+     the server: "128.189.231.64:8000/navigation/title".

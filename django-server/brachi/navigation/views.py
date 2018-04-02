@@ -189,6 +189,10 @@ def play(request):
             raise ValueError("Invalid level in GET request.")
         context['level'] = get_level
         context['level_name'] = ALL_LEVELS[get_level]
+        context['start_point'] = START_POINTS[get_level]
+        context['end_point'] = END_POINTS[get_level]
+        context['level_image_link'] = LEVEL_IMAGES[get_level]
+        context['solution_image_link'] = SOLUTION_IMAGES[get_level]
         return render(request, 'navigation/simulation_page.html', context)
     except:
         pass # just let the return below handle it
