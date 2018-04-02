@@ -67,7 +67,7 @@ def level_select(request):
         return title(request, session_error=True)
     context = {}
     context['levels'] = ALL_LEVELS
-    return render(request, 'navigation/level_select.html', context)
+    return render(request, 'navigation/levelSelector.html', context)
 
 """
 Queries the database such that the front end can construct leaderboards based

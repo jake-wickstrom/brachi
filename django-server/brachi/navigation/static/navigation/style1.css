@@ -50,7 +50,7 @@ body {
 }
 
 
-.level a{
+.level div{
   display: block;
   color: white;
   font-size: 20px;
@@ -74,8 +74,24 @@ body {
   text-decoration: none;
 }
 
+.nav div{
+  display: block;
+  cursor: pointer;
+  color: white;
+  font-size: 20px;
+  font-family: 'Lato', sans-serif;
+  text-align: center;
+  padding: 30px 30px;
+  text-decoration: none;
+}
+
 li a:hover {
   background-color: #111;
+}
+
+li div:hover {
+  background-color: #111;
+  cursor: pointer;
 }
 
 .login {
