@@ -37,7 +37,7 @@ def title(request, invalid_name=False, session_error=False):
     context = {}
     context['invalid_name'] = invalid_name
     context['session_error'] = session_error
-    return render(request, 'navigation/title.html', context)
+    return render(request, 'navigation/frontpage.html', context)
 
 """
 Creates a Player object in the database for the user if the username they provided

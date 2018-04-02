@@ -5,11 +5,11 @@
 /* i) Headers, Background, General Text */
 
 header {
-position: fixed;
-font-family: 'Lato', sans-serif;
-font-size: 70;
-left: 10px;
-top: 0px;
+  position: fixed;
+  font-family: 'Lato', sans-serif;
+  font-size: 70px;
+  left: 10px;
+  top: 0px;
 }
 
 body {
