@@ -11,7 +11,7 @@ To set up and run the Django server locally:
 
 To set up and run the server for EVERYONE on the same Wi-Fi node as you:
   1. Make sure you are on the wifi network that you want to deploy the server to.
-  2. Find the IPv4 address of the server; in Windows you can click the wifi symbol
+  2. Find the IPv4 address of the wifi node; in Windows you can click the wifi symbol
      in the bar at the bottom of the screen and click Properties on the wifi you
      are connected to.
   3. Go to "brachi\django-server\brachi\brachi\settings.py" and scroll down to

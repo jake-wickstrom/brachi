@@ -47,7 +47,7 @@
           <!--Table row entries have the form: l0-e0, where l0 denotes level 0 and e0 denotes entry 0 for that level-->
           {% for leaderboard in leaderboards %}
           {% for entry in leaderboard %}
-          <tr style='display:none; padding-left:5%;' id='l{{ forloop.parentloop.counter0 }}-e{{ forloop.counter0 }}'><td>{{ forloop.counter }}: {{ entry.0 }} |</td><td>{{ entry.1 }}</td></tr>
+          <tr style='display:none; padding-left:5%;' id='l{{ forloop.parentloop.counter0 }}-e{{ forloop.counter0 }}'><td>{{ forloop.counter }}: {{ entry.0 }} |</td><td>{{ entry.1|floatformat:2 }}</td></tr>
           {% endfor %}
           {% endfor %}
         </table>

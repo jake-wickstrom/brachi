@@ -11,7 +11,6 @@ ALL_LEVELS = ['Brachistochrone',
 
 IDEAL_TIMES = [0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1]
 
-# TODO: fill these links up for each level
 LEVEL_IMAGES = ['some link',
                 'some link',
                 'some link',
@@ -28,7 +27,6 @@ SOLUTION_IMAGES = ['some link',
                    'some link',
                    'some link']
 
-# TODO: set these for each level
 START_POINTS = [(0.1, 0.1),
                 (0.1, 0.1),
                 (0.1, 0.1),
