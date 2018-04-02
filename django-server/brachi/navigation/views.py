@@ -37,6 +37,14 @@ def title(request, invalid_name=False, session_error=False):
     context = {}
     context['invalid_name'] = invalid_name
     context['session_error'] = session_error
+    existing_names = Player.objects.values_list('name', flat=True)
+    # TODO: update to fastest possible (or something) times given by algorithm
+    if 'Sonic the Hedgehog' not in existing_names:
+        sonic = Player(name='Sonic the Hedgehog', time_l0=2.0, time_l1=2.0, time_l2=2.0, time_l3=2.0, time_l4=2.0, time_l5=2.0, time_l6=2.0)
+        sonic.save()
+    if 'Daymon' not in existing_names:
+        daymon = Player(name='Daymon', time_l0=1.0, time_l1=1.0, time_l2=1.0, time_l3=1.0, time_l4=1.0, time_l5=1.0, time_l6=1.0)
+        daymon.save()
     return render(request, 'navigation/frontpage.html', context)
 
 """
