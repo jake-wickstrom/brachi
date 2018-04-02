@@ -1,13 +1,22 @@
 canvas {
   border: 1px solid black;
-  background-color: rgb(250, 250, 250);
-  //background-image: url(https://github.com/jake-wickstrom/brachi/blob/scale-gui/images/brachi.png?raw=true);
+  background-color: rgb(250, 250, 250); //background-image: url(https://github.com/jake-wickstrom/brachi/blob/scale-gui/images/brachi.png?raw=true);
   background-size: 100% 100%;
 }
 
 body {
   background-image: url(https://img-new.cgtrader.com/items/101046/026436c913/office-workstation-design-3d-model-sldprt-sldasm-slddrw.jpg);
   background-size: 100% 100%;
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+li {
+  display: inline;
 }
 
 #canvasCol {
@@ -21,8 +30,7 @@ body {
 
 #info-display {
   font-family: 'Indie Flower', cursive;
-  font-size: 25px;
-  //border: 1px solid black;
+  font-size: 25px; //border: 1px solid black;
   width: 30%;
   padding: 5%;
   margin-bottom: 0%;
@@ -30,8 +38,7 @@ body {
 
 #opt-time {
   font-family: 'Indie Flower', cursive;
-  font-size: 25px;
-  //border: 1px solid black;
+  font-size: 25px; //border: 1px solid black;
   width: 30%;
   padding: 5%;
   margin-bottom: 10%;

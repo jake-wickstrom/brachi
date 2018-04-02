@@ -2,6 +2,7 @@
 <html>
 
 {% load static %}
+
 <head>
   <title>Brachi - Level {{ level }}</title>
   <link rel="stylesheet" href="{% static 'navigation/simulation_page_style.css' %}">
@@ -12,6 +13,13 @@
 </head>
 
 <body>
+  <ul>
+    <header>Brachi</header>
+    <li><a href="about.html">About</a></li>
+    <li><a href="leaderboard.html">Leaderboard</a></li>
+    <li><a href="levelSelector.html">Levels</a></li>
+    <li><a href="frontpage.html">Logout</a></li>
+  </ul>
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-6 col-md-6 col-lg-6" id="canvasCol">
@@ -42,9 +50,7 @@
       </div>
     </div>
   </div>
-  {% autoescape off %}
-  {{ script }}
-  {% endautoescape %}
+  {% autoescape off %} {{ script }} {% endautoescape %}
   <script>
     var level = {{ level }};
   </script>
