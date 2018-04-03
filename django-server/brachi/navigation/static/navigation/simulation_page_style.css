@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Lato|Vollkorn');
 canvas {
   border: 1px solid black;
   background-color: rgb(250, 250, 250); //background-image: url(https://github.com/jake-wickstrom/brachi/blob/scale-gui/images/brachi.png?raw=true);
@@ -11,16 +12,15 @@ canvas {
   height: 70px;
 }
 header {
-position: fixed;
-color: white;
-font-family: 'Lato', sans-serif;
-font-size: 70px;
-left: 0px;
-padding-left: 10px;
-top: 0px;
-right: 0px;
-background-color: black;
-
+  position: fixed;
+  color: white;
+  font-family: 'Lato', sans-serif;
+  font-size: 70px;
+  left: 0px;
+  padding-left: 10px;
+  top: 0px;
+  right: 0px;
+  background-color: black;
 }
 body {
   background-image: url(VectorField.svg);

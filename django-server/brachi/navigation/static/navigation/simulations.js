@@ -72,7 +72,13 @@ $(document).ready(function() {
 
   document.getElementById("solnButton").addEventListener("click", function() {
     document.getElementById('simCanvas').style.backgroundImage="url(" + CONTOUR_IMAGE_OPT + ")";
-    document.getElementById('opt-time').innerHTML = "Optimal Time: " + 1111 + " s";
+    document.getElementById('opt-time').innerHTML = "Optimal Time: " + OPTIMAL_TIME + " s";
+    var dict = [];
+    dict.push({
+      key: "level",
+      value: level
+    });
+    post('play/solution/', dict)
   });
 
   document.getElementById("backButton").addEventListener("click", function() {
@@ -176,7 +182,7 @@ function Marble(path, pathTimes, directions) {
   this.draw = function() {
     ctx.beginPath();
     ctx.arc(this.x, this.y, MARBLE_RADIUS, 0, 2 * Math.PI);
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "blue";
     ctx.fill();
   }
 
@@ -358,7 +364,7 @@ function getMouseLoc(event) {
     var y = event.y - $('#title-block').height();
     xpoints.push(x);
     ypoints.push(y);
-    ctx.fillStyle = "black";
+    ctx.fillStyle = "red";
     ctx.fillRect(x, y, 3, 3);
   }
 }
@@ -369,7 +375,7 @@ function mouseDown(event) {
   var y = event.y - $('#title-block').height();
   xpoints.push(x);
   ypoints.push(y);
-  ctx.fillStyle = "black";
+  ctx.fillStyle = "red";
   ctx.fillRect(x, y, 3, 3);
 }
 
@@ -404,7 +410,7 @@ function mouseUp(event) {
 }
 
 function connectPoints(x1, y1, x2, y2) {
-  ctx.strokeStyle = "black";
+  ctx.strokeStyle = "red";
   ctx.beginPath();
   ctx.moveTo(x1, y1);
   ctx.lineTo(x2, y2);
