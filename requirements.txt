@@ -3,4 +3,4 @@
 #
 # Check out the following page for an example of how to fill up this file:
 # https://pip.pypa.io/en/stable/reference/pip_install/#example-requirements-file
-Tkinter
+django
