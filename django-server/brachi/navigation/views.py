@@ -128,70 +128,63 @@ def play(request):
         if get_level == 0:
             context['script'] = """
             <script>
-                function getPotential(x, y, xmax, ymax) {
-                    var x_pos = x / xmax;
-                    var y_pos = y / ymax;
-                    return 1000*y_pos;
+                function getPotential(x, y) {
+                    //yy
+                    return y;
                 }
             </script>
             """
         elif get_level == 1:
             context['script'] = """
             <script>
-                function getPotential(x, y, xmax, ymax) {
-                    var x_pos = x / xmax;
-                    var y_pos = y / ymax;
-                    return 1000*y_pos;
+                function getPotential(x, y) {
+                    //np.power(yy,2)
+                    return Math.pow(y, 2);
                 }
             </script>
             """
         elif get_level == 2:
             context['script'] = """
             <script>
-                function getPotential(x, y, xmax, ymax) {
-                    var x_pos = x / xmax;
-                    var y_pos = y / ymax;
-                    return 1000*y_pos;
+                function getPotential(x, y) {
+                    //np.power((yy-0.5),2) - xx
+                    return Math.pow(y-0.5, 2) - x;
                 }
             </script>
             """
         elif get_level == 3:
             context['script'] = """
             <script>
-                function getPotential(x, y, xmax, ymax) {
-                    var x_pos = x / xmax;
-                    var y_pos = y / ymax;
-                    return 1000*y_pos;
+                function getPotential(x, y) {
+                    //-0.03/np.sqrt(np.power((yy-0.5),2)+np.power((xx-(.95-.05)/2),2)) - 0.1/np.sqrt(np.power((yy-0.5-0.18*2),2)+np.power((xx-.95),2)) -0.06/np.sqrt(np.power((yy-0.1),2)+np.power((xx-.8),2)) -0.04/np.sqrt(np.power((yy-0.15),2)+np.power((xx-.15),2))
+                    return -0.03/Math.sqrt(Math.pow((y-0.5), 2)+Math.pow((x-(0.95-0.05)/2),2)) - 0.1/Math.sqrt(Math.pow((y-0.5-0.18*2), 2)+Math.pow((x-0.95), 2)) - 0.06/Math.sqrt(Math.pow((y-0.1),2)+Math.pow((x-0.8), 2)) - 0.04/Math.sqrt(Math.power((y-0.15),2)+Math.pow((x-0.15),2));
                 }
             </script>
             """
         elif get_level == 4:
             context['script'] = """
             <script>
-                function getPotential(x, y, xmax, ymax) {
-                    var x_pos = x / xmax;
-                    var y_pos = y / ymax;
-                    return 1000*y_pos;
+                function getPotential(x, y) {
+                    //np.power((yy-0.5),2) - xx + 0.1/np.sqrt(np.power((yy-0.5),2)+np.power((xx-(.95-.05)/2),2)) - 0.1/np.sqrt(np.power((yy-0.5-0.18*2),2)+np.power((xx-.95),2))
+                    return Math.pow((y-0.5),2) - x + 0.1/Math.sqrt(Math.pow((y-0.5),2)+Math.pow((x-(0.95-0.05)/2),2)) - 0.1/Math.sqrt(Math.pow((y-0.5-0.18*2),2)+Math.pow((x-0.95),2));
                 }
             </script>
             """
         elif get_level == 5:
             context['script'] = """
             <script>
-                function getPotential(x, y, xmax, ymax) {
-                    var x_pos = x / xmax;
-                    var y_pos = y / ymax;
-                    return 1000*y_pos;
+                function getPotential(x, y) {
+                    //np.sin(xx*np.pi) + np.sin(yy*np.pi)
+                    return Math.sin(x*Math.PI) + Math.sin(y*Math.PI);
                 }
             </script>
             """
         elif get_level == 6:
             context['script'] = """
             <script>
-                function getPotential(x, y, xmax, ymax) {
-                    var x_pos = x / xmax;
-                    var y_pos = y / ymax;
-                    return 1000*y_pos;
+                function getPotential(x, y) {
+                    //np.sin((yy+.5)*np.cos(np.pi*2*xx))
+                    return Math.sin((y+0.5)*Math.cos(Math.PI*2*x));
                 }
             </script>
             """
