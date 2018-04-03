@@ -1,6 +1,12 @@
+import csv, glob, os
 import numpy as np
 import matplotlib.pyplot as pl
 import scipy.stats as st
+
+#change this to edit the thickness of the solution line
+SOLWIDTH = 3
+SOLCOLOR = "orange"
+PLOTCOLORS = "Purples"
 
 
 x = np.linspace(0,10,100)
@@ -37,7 +43,7 @@ f7[f7 > 1.5*np.max(f3)] = 1.5*np.max(f3)
 f7[f7 < 1.5*np.min(f3)] = 1.5*np.min(f3)
 f7_t = np.transpose(f7)
 
-functions = [[f1,f1_t,"Level1"],[f2,f2_t,"Level2"],[f3,f3_t,"Level3"],[f4,f4_t,"Level4"],[f5,f5_t,"Level5"],[f6,f6_t,"Level6"],[f7,f7_t,"Level7"]]
+functions = [[f1,f1_t,"level1"],[f2,f2_t,"level2"],[f3,f3_t,"level3"],[f4,f4_t,"level4"],[f5,f5_t,"level5"],[f6,f6_t,"level6"],[f7,f7_t,"level7"]]
 
 for f in functions:
     pl.figure()
@@ -47,7 +53,7 @@ for f in functions:
     #IM = ax1.imshow(f[1], cmap="Purples", origin='lower', extent=(-3, 3, -3, 3))
     
     # Contourf plot
-    cfset = ax.contourf(xx, yy, f[0], cmap='Purples')
+    cfset = ax.contourf(xx, yy, f[0], cmap= PLOTCOLORS)
     cset = ax.contour(xx, yy, f[0], colors='k')
     
     # Contourf plot with labels
@@ -63,6 +69,22 @@ for f in functions:
     ax.set_ylim(ymin, ymax)
     ax.get_xaxis().set_visible(False)
     ax.get_yaxis().set_visible(False)
-    pl.savefig(f[2],bbox_inches='tight',dpi = 500)
+    pl.savefig("potentials\\" + f[2],bbox_inches='tight',dpi = 500)
+    
+    x = []
+    y = []
+    
+    with open(glob.glob(os.getcwd()+"\\potentials-solutions\\" + f[2] + "*.csv")[0], newline='') as file:
+        reader = csv.reader(file)
+        for row in reader:
+            x.append(row[0])
+            y.append(row[1])
+            
+    ax.plot(x,y,color = SOLCOLOR,linewidth = SOLWIDTH)
+    pl.savefig("potentials-solutions\\" + f[2] + "sol",bbox_inches='tight',dpi = 500)
+    
+    ax.plot()
 
 pl.show()
+
+print(glob.glob(os.getcwd()+"\\potentials-solutions\\level1*.csv")[0])
