@@ -43,9 +43,6 @@ syms x(s) y(s) U(x, y) x2 y2
 % U = -U; %repulsive version ("asteroid field")
 % U2 = -U2;
 
-% U = y; %constant g-field
-% U2 = y2;
-
 % U = (y-0.5)^2 - x; %constant g-field
 % U2 = (y2-0.5)^2 - x2;
 
@@ -58,8 +55,8 @@ syms x(s) y(s) U(x, y) x2 y2
 % U = y^2 - x + 1/sqrt((y-0)^2+(x-2.5)^2) - 1/sqrt((y-2)^2+(x-5)^2);
 % U2 = y2^2 - x2 + 1/sqrt((y2-0)^2+(x2-2.5)^2) - 1/sqrt((y2-2)^2+(x2-5)^2);
 
-% U = (y-0.5)^2 - x + 1/sqrt((y-0.5)^2+(x-(xf-xi)/2)^2) - 1/sqrt((y-0.5-0.18*2)^2+(x-xf)^2);
-% U2 = (y2-0.5)^2 - x2 + 1/sqrt((y2-0.5)^2+(x2-(xf-xi)/2)^2) - 1/sqrt((y2-0.5-0.18*2)^2+(x2-xf)^2);
+% U = (y-0.5)^2 - x + .1/sqrt((y-0.5)^2+(x-(xf-xi)/2)^2) - .1/sqrt((y-0.5-0.18*2)^2+(x-xf)^2);
+% U2 = (y2-0.5)^2 - x2 + .1/sqrt((y2-0.5)^2+(x2-(xf-xi)/2)^2) - .1/sqrt((y2-0.5-0.18*2)^2+(x2-xf)^2);
 
 % U = atan(y/x);
 % U2 = atan(y2/x2);
@@ -146,18 +143,12 @@ for theta = dydxStart:dydxInc:dydxEnd
             ysol = pt(:,2);
 
             %time = d/v, v=sqrt(E-U)
-%             d = sqrt((ysol(2)-ysol(1))^2+(xsol(2)-xsol(1))^2); %interparc generates equidistant points.
+%             d = sqrt((ysol(2:end)-ysol(1:end-1))^2+(xsol(2:end)-xsol(1:end-1))^2); %interparc generates equidistant points
 %             time = sum( d ./ sqrt(E - ...
 %                 -( -1./sqrt(ysol(2:end).^2+xsol(2:end).^2)...
 %                 -1./sqrt(ysol(2:end).^2+(xsol(2:end)+0.5).^2)...
 %                 -1./sqrt((ysol(2:end)-2).^2+xsol(2:end).^2)...
 %                 -1./sqrt((ysol(2:end)-1).^2+(xsol(2:end)-2).^2) )) );
-%             time = sum( sqrt((ysol(2:end)-ysol(1:end-1)).^2+(xsol(2:end)-xsol(1:end-1)).^2) ./ sqrt(E - ...
-%                 ( ysol(2:end) )) );
-%             time = sum( d ./ sqrt(E - ...
-%                 ( (ysol(2:end)-0.5).^2 - xsol(2:end)...
-%                 + 1./sqrt((ysol(2:end)-0.5).^2+(xsol(2:end)-(xf-xi)/2).^2)...
-%                 - 1./sqrt((ysol(2:end)-0.5-0.18*2).^2+(xsol(2:end)-xf).^2) )) );
 %             time = sum( sqrt((ysol(2:end)-ysol(1:end-1)).^2+(xsol(2:end)-xsol(1:end-1)).^2) ./ sqrt(E - ...
 %                 ( (ysol(2:end)).^2 )) );
 %             time = sum( sqrt((ysol(2:end)-ysol(1:end-1)).^2+(xsol(2:end)-xsol(1:end-1)).^2) ./ sqrt(E - ...
@@ -174,6 +165,8 @@ for theta = dydxStart:dydxInc:dydxEnd
             time = sum( sqrt((ysol(2:end)-ysol(1:end-1)).^2+(xsol(2:end)-xsol(1:end-1)).^2) ./ sqrt(E - ...
                 ( sin((ysol(2:end)+0.5).*cos(pi*2*xsol(2:end))) )) );
             
+
+
             if time < tBest && isreal(time)
                 xsolBest = xsol;
                 ysolBest = ysol;
@@ -200,7 +193,6 @@ pt = interparc(1e3,xsol,ysol,'spline');
 xsol = pt(:,1);
 ysol = pt(:,2);
 %time = d/v, v=sqrt(E-U)
-% d = sqrt((ysol(2)-ysol(1))^2+(xsol(2)-xsol(1))^2); %interparc generates equidistant points
 tBestSpline = sum( sqrt((ysol(2:end)-ysol(1:end-1)).^2+(xsol(2:end)-xsol(1:end-1)).^2) ./ sqrt(E - ...
     ( sin((ysol(2:end)+0.5).*cos(pi*2*xsol(2:end))) )) );
 xsolBestSpline = xsol;
