@@ -148,14 +148,12 @@ li div:hover {
   top: 15%;
   background-color: black;
   width: 50%;
-  float: center;
   left: 25%;
-  bottom: 5%;
   padding: 10px 10px 10px;
   border-style: solid;
   border-color: white;
   border-width: 1px;
-
+  height: auto;
 }
 
 #loginContainer {
