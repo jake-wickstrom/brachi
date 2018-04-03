@@ -13,12 +13,6 @@ const CANVAS_SIZE_SCALE = 0.7;
 const CONTOUR_IMAGE = "https://github.com/jake-wickstrom/brachi/blob/scale-gui/images/brachi.png?raw=true";
 const CONTOUR_IMAGE_OPT = "https://github.com/jake-wickstrom/brachi/blob/scale-gui/images/brachi-optimal.png?raw=true";
 
-const XI_SCALE = 0.1;
-const YI_SCALE = 0.9;
-const XF_SCALE = 0.9;
-const YF_SCALE = 0.1;
-// above values edited by server
-
 var mouseDownFlag = false;
 var canvas = document.getElementById("simCanvas");
 var ctx = canvas.getContext("2d");
@@ -420,11 +414,6 @@ function connectPoints(x1, y1, x2, y2) {
   ctx.lineTo(x2, y2);
   ctx.lineWidth=2;
   ctx.stroke();
-}
-
-// returns potential at given x and y and scales for x and y values between [0, 1]
-function getPotential(x, y) {
-  return M * GRAV * y;
 }
 
 // inverts y values such that direction of y-axis is flipped and normalized them between 0 and 1

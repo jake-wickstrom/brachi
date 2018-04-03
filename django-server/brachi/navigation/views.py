@@ -124,7 +124,6 @@ def play(request):
     try:
         get_level = int(request.GET['level'])
         # generate the getPotential() functions to be sent to the front end for each level
-        # TODO: make sure these are correct
         if get_level == 0:
             context['script'] = """
             <script>
