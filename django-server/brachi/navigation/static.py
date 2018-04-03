@@ -19,13 +19,13 @@ LEVEL_IMAGES = ['https://github.com/jake-wickstrom/brachi/blob/master/images/bra
                 'https://github.com/jake-wickstrom/brachi/blob/master/images/hills.png?raw=true',
                 'https://github.com/jake-wickstrom/brachi/blob/master/images/hills-2.png?raw=true']
 
-SOLUTION_IMAGES = ['https://github.com/jake-wickstrom/brachi/blob/master/images/brachi.png?raw=true',
-                   'https://github.com/jake-wickstrom/brachi/blob/master/images/brachi-2.png?raw=true',
-                   'https://github.com/jake-wickstrom/brachi/blob/master/images/half-pipe.png?raw=true',
-                   'https://github.com/jake-wickstrom/brachi/blob/master/images/asteroid-field.png?raw=true',
-                   'https://github.com/jake-wickstrom/brachi/blob/master/images/half-pipe-with-charge.png?raw=true',
-                   'https://github.com/jake-wickstrom/brachi/blob/master/images/hills.png?raw=true',
-                   'https://github.com/jake-wickstrom/brachi/blob/master/images/hills-2.png?raw=true']
+SOLUTION_IMAGES = ['https://github.com/jake-wickstrom/brachi/blob/master/images/brachi-soln.png?raw=true',
+                   'https://github.com/jake-wickstrom/brachi/blob/master/images/brachi-2-sol.png?raw=true',
+                   'https://github.com/jake-wickstrom/brachi/blob/master/images/half-pipe-soln.png?raw=true',
+                   'https://github.com/jake-wickstrom/brachi/blob/master/images/asteroid-field-soln.png?raw=true',
+                   'https://github.com/jake-wickstrom/brachi/blob/master/images/half-pipe-with-charge-soln.png?raw=true',
+                   'https://github.com/jake-wickstrom/brachi/blob/master/images/hills-soln.png?raw=true',
+                   'https://github.com/jake-wickstrom/brachi/blob/master/images/hills-2-soln.png?raw=true']
 
 START_POINTS = [(0.05, 0.6),
                 (0.05, 0.6),
