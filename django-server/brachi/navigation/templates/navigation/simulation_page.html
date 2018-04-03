@@ -2,6 +2,7 @@
 <html>
 
 {% load static %}
+
 <head>
   <title>Level {{ level }} - {{ level_name }}</title>
   <link rel="stylesheet" href="{% static 'navigation/simulation_page_style.css' %}">
@@ -13,16 +14,22 @@
 
 <body>
   <div class="container-fluid">
+    <div class="row" >
+    <header id="title-block">Brachi</header>
+  </div>
     <div class="row">
       <div class="col-sm-6 col-md-6 col-lg-6" id="canvasCol">
         <canvas id="simCanvas"></canvas>
         <div id="error-display">
-          <p>Draw a path that starts and ends in the given circles</p>
+          <p>Draw a path that starts and ends in the <br> given circles</p>
         </div>
       </div>
-      <div class="col-sm-6 col-md-6 col-lg-6">
+      <div class="col-sm-6 col-md-6 col-lg-6" id="rightCol">
         <div class="row" id="info-display">
           <p>Your Time: Infinity s</p>
+        </div>
+        <div class="row" id="opt-time">
+          <p>Optimal Time: N/A</p>
         </div>
         <div class="row" id="buttons">
           <button type="button" id="startButton">Start</button>
@@ -31,14 +38,15 @@
           <button type="button" id="resetButton">Reset</button>
         </div>
         <div class="row" id="buttons">
+          <button type="button" id="solnButton">Show Solution</button>
+        </div>
+        <div class="row" id="buttons">
           <button type="button" id="backButton">Back</button>
         </div>
       </div>
     </div>
   </div>
-  {% autoescape off %}
-  {{ script }}
-  {% endautoescape %}
+  {% autoescape off %} {{ script }} {% endautoescape %}
   <script>
     var xi_scale = {{ start_point.0 }};
     var yi_scale = {{ start_point.1 }};

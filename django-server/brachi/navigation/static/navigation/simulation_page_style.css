@@ -1,60 +1,130 @@
 canvas {
   border: 1px solid black;
-  background-color: rgb(250, 250, 250);
-  //background-image: url(https://pre00.deviantart.net/25c4/th/pre/i/2013/169/f/c/yellow_lined_paper_by_andie200-d69jqez.png);
+  background-color: rgb(250, 250, 250); //background-image: url(https://github.com/jake-wickstrom/brachi/blob/scale-gui/images/brachi.png?raw=true);
   background-size: 100% 100%;
 }
 
+.header {
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  height: 70px;
+}
+header {
+position: fixed;
+color: white;
+font-family: 'Lato', sans-serif;
+font-size: 70px;
+left: 0px;
+padding-left: 10px;
+top: 0px;
+right: 0px;
+background-color: black;
+
+}
 body {
-  background-image: url(https://img-new.cgtrader.com/items/101046/026436c913/office-workstation-design-3d-model-sldprt-sldasm-slddrw.jpg);
-  background-size: 100% 100%;
+  background-image: url(VectorField.svg);
+}
+
+ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    background-color: black;
+    right: 0px;
+    left: 0px;
+    top: 0px;
+}
+
+li {
+  float: right;
+  display: inline;
+}
+
+li a{
+  display: block;
+  color: white;
+  font-size: 20px;
+  padding: 20px 30px;
+  font-family: 'Lato', sans-serif;
+  text-align: center;
+  text-decoration: none;
+  background-color: black;
 }
 
 #canvasCol {
+  top:100px;
   padding: 0px;
+  color: white;
+  font-family: 'Lato', sans-serif;
+}
+#rightCol {
+  top:100px;
+  padding: 0px;
+  color: white;
+  font-family: 'Lato', sans-serif;
 }
 
 #error-display {
-  font-family: 'Indie Flower', cursive;
+
   font-size: 25px;
 }
 
 #info-display {
-  font-family: 'Indie Flower', cursive;
-  font-size: 25px;
-  //border: 1px solid black;
-  width: 30%;
+
+  font-size: 25px; //border: 1px solid black;
+  width: 40%;
   padding: 5%;
-  margin-bottom: 20%;
+  margin-bottom: 0%;
+}
+
+#opt-time {
+
+  font-size: 25px; //border: 1px solid black;
+  width: 40%;
+  padding: 5%;
+  margin-bottom: 0%;
 }
 
 #buttons {
-  margin-top: 10%;
-  margin-bottom: 10%;
+  margin-top: 5%;
+  margin-bottom: 5%;
 }
 
 #startButton {
-  font-family: 'Indie Flower', cursive;
+
   font-size: 25px;
   height: 100%;
   width: 30%;
-  background-color: rgba(0, 0, 0, 0);
-  border: 0px;
+  border: 1px;
+  border-radius: 25px;
+  background-color: red;
+
 }
 
 #resetButton {
-  font-family: 'Indie Flower', cursive;
+  border-radius: 25px;
+  background-color: red;
   font-size: 25px;
   height: 100%;
   width: 30%;
-  background-color: rgba(0, 0, 0, 0);
   border: 0px;
 }
 
 #backButton {
-  font-family: 'Indie Flower', cursive;
+  border-radius: 25px;
+  background-color: red;
   font-size: 25px;
   height: 100%;
   width: 30%;
-  background-color: rgba(0, 0, 0, 0);
   border: 0px;
+}
+
+#solnButton {
+  border-radius: 25px;
+  background-color: red;
+  font-size: 25px;
+  height: 100%;
+  width: 30%;
+  border: 0px;
+}
