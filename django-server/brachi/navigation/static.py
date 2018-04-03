@@ -11,21 +11,21 @@ ALL_LEVELS = ['Brachistochrone',
 
 IDEAL_TIMES = [2.5453, 2.5573, 1.8867, 3.0256, 2.3710, 1.3230, 1.7754]
 
-LEVEL_IMAGES = ['some link',
-                'some link',
-                'some link',
-                'some link',
-                'some link',
-                'some link',
-                'some link']
+LEVEL_IMAGES = ['https://github.com/jake-wickstrom/brachi/blob/master/images/brachi.png?raw=true',
+                'https://github.com/jake-wickstrom/brachi/blob/master/images/brachi-2.png?raw=true',
+                'https://github.com/jake-wickstrom/brachi/blob/master/images/half-pipe.png?raw=true',
+                'https://github.com/jake-wickstrom/brachi/blob/master/images/asteroid-field.png?raw=true',
+                'https://github.com/jake-wickstrom/brachi/blob/master/images/half-pipe-with-charge.png?raw=true',
+                'https://github.com/jake-wickstrom/brachi/blob/master/images/hills.png?raw=true',
+                'https://github.com/jake-wickstrom/brachi/blob/master/images/hills-2.png?raw=true']
 
-SOLUTION_IMAGES = ['some link',
-                   'some link',
-                   'some link',
-                   'some link',
-                   'some link',
-                   'some link',
-                   'some link']
+SOLUTION_IMAGES = ['https://github.com/jake-wickstrom/brachi/blob/master/images/brachi.png?raw=true',
+                   'https://github.com/jake-wickstrom/brachi/blob/master/images/brachi-2.png?raw=true',
+                   'https://github.com/jake-wickstrom/brachi/blob/master/images/half-pipe.png?raw=true',
+                   'https://github.com/jake-wickstrom/brachi/blob/master/images/asteroid-field.png?raw=true',
+                   'https://github.com/jake-wickstrom/brachi/blob/master/images/half-pipe-with-charge.png?raw=true',
+                   'https://github.com/jake-wickstrom/brachi/blob/master/images/hills.png?raw=true',
+                   'https://github.com/jake-wickstrom/brachi/blob/master/images/hills-2.png?raw=true']
 
 START_POINTS = [(0.05, 0.6),
                 (0.05, 0.6),

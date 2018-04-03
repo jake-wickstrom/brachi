@@ -9,10 +9,6 @@ const NUM_SPLINE_POINTS = 1000;
 const ENDPOINT_CIRCLE_RADIUS = 15;
 const CANVAS_SIZE_SCALE = 0.7;
 
-// below values edited by server
-const CONTOUR_IMAGE = "https://github.com/jake-wickstrom/brachi/blob/scale-gui/images/brachi.png?raw=true";
-const CONTOUR_IMAGE_OPT = "https://github.com/jake-wickstrom/brachi/blob/scale-gui/images/brachi-optimal.png?raw=true";
-
 var mouseDownFlag = false;
 var canvas = document.getElementById("simCanvas");
 var ctx = canvas.getContext("2d");

@@ -156,7 +156,7 @@ def play(request):
             <script>
                 function getPotential(x, y) {
                     //-0.03/np.sqrt(np.power((yy-0.5),2)+np.power((xx-(.95-.05)/2),2)) - 0.1/np.sqrt(np.power((yy-0.5-0.18*2),2)+np.power((xx-.95),2)) -0.06/np.sqrt(np.power((yy-0.1),2)+np.power((xx-.8),2)) -0.04/np.sqrt(np.power((yy-0.15),2)+np.power((xx-.15),2))
-                    return -0.03/Math.sqrt(Math.pow((y-0.5), 2)+Math.pow((x-(0.95-0.05)/2),2)) - 0.1/Math.sqrt(Math.pow((y-0.5-0.18*2), 2)+Math.pow((x-0.95), 2)) - 0.06/Math.sqrt(Math.pow((y-0.1),2)+Math.pow((x-0.8), 2)) - 0.04/Math.sqrt(Math.power((y-0.15),2)+Math.pow((x-0.15),2));
+                    return -0.03/Math.sqrt(Math.pow((y-0.5), 2)+Math.pow((x-(0.95-0.05)/2),2)) - 0.1/Math.sqrt(Math.pow((y-0.5-0.18*2), 2)+Math.pow((x-0.95), 2)) - 0.06/Math.sqrt(Math.pow((y-0.1),2)+Math.pow((x-0.8), 2)) - 0.04/Math.sqrt(Math.pow((y-0.15),2)+Math.pow((x-0.15),2));
                 }
             </script>
             """
