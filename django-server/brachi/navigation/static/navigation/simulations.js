@@ -1,7 +1,7 @@
 const GRAV = 0.5;
 const M = 2;
 const T0 = 0.000001;
-const MARBLE_RADIUS = 5;
+const MARBLE_RADIUS = 7;
 const FILTER_INTERVAL = 20;
 const TIMESCALE = 1;
 const DISTANCE_FILTER = 20;
@@ -59,7 +59,7 @@ $(document).ready(function() {
   document.getElementById("resetButton").addEventListener("click", function() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     endPoints.draw();
-    document.getElementById('error-display').innerHTML = "Draw a path that starts and ends in the given circles";
+    document.getElementById('error-display').innerHTML = "Draw a path that starts and ends in the <br> given circles";
     document.getElementById('simCanvas').style.backgroundImage="url(" + CONTOUR_IMAGE + ")";
     runAnimation = false;
     xpoints = [];
@@ -186,7 +186,7 @@ function Marble(path, pathTimes, directions) {
   this.draw = function() {
     ctx.beginPath();
     ctx.arc(this.x, this.y, MARBLE_RADIUS, 0, 2 * Math.PI);
-    ctx.fillStyle = "red";
+    ctx.fillStyle = "black";
     ctx.fill();
   }
 
@@ -252,6 +252,7 @@ function EndPoints(x0, y0, xf, yf) {
   this.yf = yf;
 
   this.draw = function() {
+    ctx.strokeStyle = "black";
     ctx.beginPath();
     ctx.arc(this.x0, this.y0, ENDPOINT_CIRCLE_RADIUS, 0, 2 * Math.PI);
     ctx.stroke();
@@ -364,22 +365,22 @@ function filterPoints(xs, ys, x0, y0, xf, yf) {
 function getMouseLoc(event) {
   if (mouseDownFlag) {
     var x = event.x;
-    var y = event.y;
+    var y = event.y - $('#title-block').height();
     xpoints.push(x);
     ypoints.push(y);
     ctx.fillStyle = "black";
-    ctx.fillRect(x, y, 2, 2);
+    ctx.fillRect(x, y, 3, 3);
   }
 }
 
 function mouseDown(event) {
   mouseDownFlag = true;
   var x = event.x;
-  var y = event.y;
+  var y = event.y - $('#title-block').height();
   xpoints.push(x);
   ypoints.push(y);
   ctx.fillStyle = "black";
-  ctx.fillRect(x, y, 2, 2);
+  ctx.fillRect(x, y, 3, 3);
 }
 
 function mouseUp(event) {
@@ -394,7 +395,7 @@ function mouseUp(event) {
   var distFromEnd = Math.sqrt(xEndDist * xEndDist + yEndDist * yEndDist);
   if (distFromStart >= ENDPOINT_CIRCLE_RADIUS || distFromEnd >= ENDPOINT_CIRCLE_RADIUS) {
     console.log('Not a valid path drawn');
-    document.getElementById('error-display').innerHTML = "Redraw a valid path starting and ending in the circles";
+    document.getElementById('error-display').innerHTML = "Redraw a valid path starting and ending <br> in the circles";
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     xpoints = [];
     ypoints = [];
@@ -413,9 +414,11 @@ function mouseUp(event) {
 }
 
 function connectPoints(x1, y1, x2, y2) {
+  ctx.strokeStyle = "black";
   ctx.beginPath();
   ctx.moveTo(x1, y1);
   ctx.lineTo(x2, y2);
+  ctx.lineWidth=2;
   ctx.stroke();
 }
 

@@ -13,22 +13,18 @@
 </head>
 
 <body>
-  <ul>
-    <header>Brachi</header>
-    <li><a href="about.html">About</a></li>
-    <li><a href="leaderboard.html">Leaderboard</a></li>
-    <li><a href="levelSelector.html">Levels</a></li>
-    <li><a href="frontpage.html">Logout</a></li>
-  </ul>
   <div class="container-fluid">
+    <div class="row" >
+    <header id="title-block">Brachi</header>
+  </div>
     <div class="row">
       <div class="col-sm-6 col-md-6 col-lg-6" id="canvasCol">
         <canvas id="simCanvas"></canvas>
         <div id="error-display">
-          <p>Draw a path that starts and ends in the given circles</p>
+          <p>Draw a path that starts and ends in the <br> given circles</p>
         </div>
       </div>
-      <div class="col-sm-6 col-md-6 col-lg-6">
+      <div class="col-sm-6 col-md-6 col-lg-6" id="rightCol">
         <div class="row" id="info-display">
           <p>Your Time: Infinity s</p>
         </div>
