@@ -1,0 +1,57 @@
+<!doctype html>
+
+{% load static %}
+<html lang="en">
+  <head>
+    <title>Brachi - Leaderboards</title>
+    <link rel="stylesheet" href="{% static 'navigation/style1.css' %}">
+  </head>
+  <script>
+    function showLeaderboard(level_num) {
+      var all_entries = document.querySelectorAll('[id^=l]');
+      for(var i = 0; i < all_entries.length; i++) {
+          var e_hide = all_entries[i];
+          e_hide.style.display = "none";
+      }
+      var query = '[id^=l' + level_num + ']';
+      var show_entries = document.querySelectorAll(query);
+      for(var i = 0; i < show_entries.length; i++) {
+          var e_show = show_entries[i];
+          e_show.style.display = "block";
+      }
+    }
+    function gotoLevelSelect() {
+      window.location.assign("/navigation/level-select");
+    }
+    function gotoProject() {
+      window.location.assign("/navigation/project");
+    }
+  </script>
+  <body>
+    <ul class="nav">
+      <header>Brachi</header>
+      <li><a target="_blank" href="https://github.com/jake-wickstrom/brachi">GitHub</a></li>
+      <li><div onclick="gotoProject()">About</div></li>
+      <li><div onclick="gotoLevelSelect()">Levels</div></li>
+    </ul>
+    <div class="leaderboard">
+      <table>
+        <tr>
+          {% for level in levels %}
+          <td><div class="leader" onclick="showLeaderboard({{ forloop.counter0 }})">{{ forloop.counter0 }}</div></td>
+          {% endfor %}
+        </tr>
+      </table>
+      <div style="overflow-y: scroll; max-height: 85%; height: 85%;">
+        <table style="display: block;">
+          <!--Table row entries have the form: l0-e0, where l0 denotes level 0 and e0 denotes entry 0 for that level-->
+          {% for leaderboard in leaderboards %}
+          {% for entry in leaderboard %}
+          <tr style='display:none; padding-left:5%;' id='l{{ forloop.parentloop.counter0 }}-e{{ forloop.counter0 }}'><td>{{ forloop.counter }}: {{ entry.0 }} |</td><td>{{ entry.1|floatformat:2 }}</td></tr>
+          {% endfor %}
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

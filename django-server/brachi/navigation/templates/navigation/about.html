@@ -1,0 +1,46 @@
+<!doctype html>
+
+{% load static %}
+<html lang="en">
+  <head>
+    <title>Brachi - About</title>
+    <link rel="stylesheet" href="{% static 'navigation/style1.css' %}">
+  </head>
+  <script>
+    function gotoLevelSelect() {
+      window.location.assign("/navigation/level-select");
+    }
+    function gotoLeaderboard() {
+      window.location.assign("/navigation/leaderboard");
+    }
+  </script>
+  <body>
+    <ul class="nav">
+      <header>Brachi</header>
+      <li><a target="_blank" href="https://github.com/jake-wickstrom/brachi">GitHub</a></li>
+      <li><div onclick="gotoLeaderboard()">Leaderboard</div></li>
+      <li><div onclick="gotoLevelSelect()">Levels</div></li>
+    </ul>
+      <container id="aboutContainer">
+        <div style="font-size:50px; padding-top:0%;">About</div>
+        <p>
+          Brachi is a game created by Aidan, Daymon, Glyn, Jake, and Sonny as a project
+          for PHYS 350; a course on classical mechanics at the University of British
+          Columbia. We aimed to expand on the classic Brachistochrone problem by incorporating
+          more advanced potentials in a fun and competitive format for our classmates to
+          enjoy.
+        </p>
+        <p>
+          A lot of work went on behind the scenes to generate the ideal solution curves
+          for the potentials we selected. Our GitHub readme contains a report for this
+          project outlining the physics and math behind these ideal solution curves. The
+          report also contains some instructions on how to run and play Brachi for
+          yourself, as well as some technical details behind animating and simulating
+          the curves you draw.
+        </p>
+        <p>
+          Thanks for playing!
+        </p>
+      </container>
+  </body>
+</html>

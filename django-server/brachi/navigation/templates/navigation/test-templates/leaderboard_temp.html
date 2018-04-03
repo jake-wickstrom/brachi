@@ -1,0 +1,44 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <title>Brachi - Leaderboards</title>
+  </head>
+  <script>
+    function showLeaderboard(level_num) {
+      var all_entries = document.querySelectorAll('[id^=l]');
+      for(var i = 0; i < all_entries.length; i++) {
+          var e_hide = all_entries[i];
+          e_hide.style.display = "none";
+      }
+      var query = '[id^=l' + level_num + ']';
+      var show_entries = document.querySelectorAll(query);
+      for(var i = 0; i < show_entries.length; i++) {
+          var e_show = show_entries[i];
+          e_show.style.display = "block";
+      }
+    }
+    function gotoLevelSelect() {
+      window.location.assign("/navigation/level-select");
+    }
+  </script>
+  <body>
+    <h1>Brachi - Leaderboards</h1>
+    <table>
+      <tr>
+        <td><div onclick="gotoLevelSelect()" style="background-color:blue; text-align:center; vertical-align:middle; cursor:pointer; padding:10px; color:white; height:100%; margin:2px;">Return to Level Select</div></td>
+      </tr>
+      <tr>
+        {% for level in levels %}
+        <td><div onclick="showLeaderboard({{ forloop.counter0 }})" style="background-color:black; text-align:center; vertical-align:middle; cursor:pointer; padding:10px; color:white; height:100%; margin:2px;">{{ level }}</div></td>
+        {% endfor %}
+      </tr>
+      <!--Table row entries have the form: l0-e0, where l0 denotes level 0 and e0 denotes entry 0 for that level-->
+      {% for leaderboard in leaderboards %}
+      {% for entry in leaderboard %}
+      <tr style='display:none;' id='l{{ forloop.parentloop.counter0 }}-e{{ forloop.counter0 }}'><td>{{ entry.0 }}</td><td>{{ entry.1 }}</td></tr>
+      {% endfor %}
+      {% endfor %}
+    </table>
+  </body>
+</html>

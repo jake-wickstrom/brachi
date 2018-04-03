@@ -1,0 +1,39 @@
+<!doctype html>
+
+{% load static %}
+<html lang="en">
+  <head>
+    <title>Brachi</title>
+    <link rel="stylesheet" href="{% static 'navigation/style1.css' %}">
+  </head>
+  <body>
+    <ul class="nav">
+      <header>Brachi</header>
+      <li><a target="_blank" href="https://github.com/jake-wickstrom/brachi">GitHub</a></li>
+    </ul>
+    <center>
+      <div id="loginContainer">
+        <label for="uname"></label>
+        <input id="username" type="text" placeholder="Enter Username" name="uname" required autofocus maxlength="20"></input><br/>
+        <ul class="login">
+          <li><div id="loginButton" onclick="submitName()">Login</div></li>
+        </ul>
+        {% if invalid_name %}
+          <div style="color:red;">The username you entered was invalid. Please try another name.</div>
+        {% endif %}
+        {% if session_error %}
+          <div style="color:red;">There was an error validating the session. You will have to play again with a new username.</div>
+        {% endif %}
+      <div id="ballCanvas">
+        <div id="ball"></div>
+      </div>
+      <script src="{% static 'navigation/ballEllipse.js' %}"></script>
+      <script>
+        function submitName() {
+          var username = document.getElementById('username').value.trim();
+          window.location.assign("/navigation/title/login?name=" + username);
+        }
+      </script>
+    </center>
+  </body>
+</html>
