@@ -1,0 +1,27 @@
+Level 1 Brachi
+	initial: [0.05 0.6]
+	finial:  [0.95 0.4]
+
+Level 2 Brachi^2
+	initial: [0.05 0.6]
+	finial:  [0.95 0.4]
+
+Level 3 Halfpipe
+	initial: [0.05 0.9]
+	finial:  [0.95 0.3]
+
+Level 4 Halfpipe with charges
+	initial: [0.05 0.68]
+	finial:  [0.95 0.41]
+
+Level 5 Hill
+	initial: [0.5 0.7]
+	finial:  [0.95 0.5]
+
+Level 6 Hill2
+	initial: [0.05 0.95]
+	finial:  [0.95 0.05]
+
+Level 7 Asteroids
+	initial: [0.05 0.3]
+	finial:  [0.95 0.5]

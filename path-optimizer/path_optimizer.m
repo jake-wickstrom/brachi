@@ -8,23 +8,23 @@ warning off %ode15i generates many warnings
 %railing, and narrowing search focus accordingly.
 
 %IC angle range
-dydxStart = 2*pi*3/4;
-dydxEnd =   2*pi*1;
+dydxStart = 2*pi*0;
+dydxEnd =   2*pi*1/2;
 %IC angle resolution
 dydxInc = 2*pi/180;
 %IC scale range and resolution in powers of ten (too extreme causes problems)
-scales = 10.^linspace(-16,-8,20);
+scales = 10.^linspace(-14,-6,17);
 %interpolation settings
 interpRes = 1e3; %reduce if getting odd loops/zig-zags
 interpMode = 'linear'; %pchip is better, but much slower than linear
 %initial KE, setting exactly to 0 causes division by 0 in DEs
 Tinit = 1e-6;
 %start point
-xi = 0.1;
-yi = 0.9;
+xi = 0.05;
+yi = 0.95;
 %end point
-xf = 0.9;
-yf = 0.1;
+xf = 0.95;
+yf = 0.05;
 %NOTE: Avoid BCs that are vertical to each other as slope is used for curve fitting
 
 m = abs((yf-yi)/(xf-xi));
@@ -43,8 +43,8 @@ syms x(s) y(s) U(x, y) x2 y2
 % U = -U; %repulsive version ("asteroid field")
 % U2 = -U2;
 
-U = y; %constant g-field
-U2 = y2;
+% U = (y-0.5)^2 - x; %constant g-field
+% U2 = (y2-0.5)^2 - x2;
 
 % U = y^2;
 % U2 = 1e-99*x2 + y2^2;
@@ -55,11 +55,26 @@ U2 = y2;
 % U = y^2 - x + 1/sqrt((y-0)^2+(x-2.5)^2) - 1/sqrt((y-2)^2+(x-5)^2);
 % U2 = y2^2 - x2 + 1/sqrt((y2-0)^2+(x2-2.5)^2) - 1/sqrt((y2-2)^2+(x2-5)^2);
 
-% U = (y-0.5)^2 - x + 1/sqrt((y-0.5)^2+(x-(xf-xi)/2)^2) - 1/sqrt((y-0.5-0.18*2)^2+(x-xf)^2);
-% U2 = (y2-0.5)^2 - x2 + 1/sqrt((y2-0.5)^2+(x2-(xf-xi)/2)^2) - 1/sqrt((y2-0.5-0.18*2)^2+(x2-xf)^2);
+% U = (y-0.5)^2 - x + .1/sqrt((y-0.5)^2+(x-(xf-xi)/2)^2) - .1/sqrt((y-0.5-0.18*2)^2+(x-xf)^2);
+% U2 = (y2-0.5)^2 - x2 + .1/sqrt((y2-0.5)^2+(x2-(xf-xi)/2)^2) - .1/sqrt((y2-0.5-0.18*2)^2+(x2-xf)^2);
 
 % U = atan(y/x);
 % U2 = atan(y2/x2);
+
+% U = sin(x*pi) + sin(y*pi);
+% U2 = sin(x2*pi) + sin(y2*pi);
+
+U = sin((y+0.5)*cos(pi*2*x));
+U2 = sin((y2+0.5)*cos(pi*2*x2));
+
+% U = -0.03/sqrt(((y-0.5))^2+((x-(.95-.05)/2))^2) ...
+%     - 0.1/sqrt(((y-0.5-0.18*2))^2+((x-.95))^2) ...
+%     - 0.06/sqrt(((y-0.1))^2+((x-.8))^2) ...
+%     - 0.04/sqrt(((y-0.15))^2+((x-.15))^2);
+% U2 = -0.03/sqrt(((y2-0.5))^2+((x2-(.95-.05)/2))^2) ...
+%     - 0.1/sqrt(((y2-0.5-0.18*2))^2+((x2-.95))^2) ...
+%     - 0.06/sqrt(((y2-0.1))^2+((x2-.8))^2) ...
+%     - 0.04/sqrt(((y2-0.15))^2+((x2-.15))^2);
 
 E = eval(subs(U, [x(s),y(s)], [xi,yi]))+Tinit; %Set initial KE to Tinit
 if eval(subs(U, [x(s),y(s)], [xf,yf])) > E-Tinit
@@ -94,7 +109,7 @@ for theta = dydxStart:dydxInc:dydxEnd
         sp0 = [dxi;dyi;0;0];
 
         %solve system and remove duplicate points
-        [~, sol] = ode15i(F, [t0, 1e9], s0, sp0);
+        [~, sol] = ode15i(F, [t0, 1e6], s0, sp0);
         [xsolRaw,ia,~] = unique(sol(:,1),'stable');
         if (numel(xsolRaw) < 2)
             continue
@@ -128,20 +143,29 @@ for theta = dydxStart:dydxInc:dydxEnd
             ysol = pt(:,2);
 
             %time = d/v, v=sqrt(E-U)
-%             d = sqrt((ysol(2)-ysol(1))^2+(xsol(2)-xsol(1))^2); %interparc generates equidistant points
+%             d = sqrt((ysol(2:end)-ysol(1:end-1))^2+(xsol(2:end)-xsol(1:end-1))^2); %interparc generates equidistant points
 %             time = sum( d ./ sqrt(E - ...
 %                 -( -1./sqrt(ysol(2:end).^2+xsol(2:end).^2)...
 %                 -1./sqrt(ysol(2:end).^2+(xsol(2:end)+0.5).^2)...
 %                 -1./sqrt((ysol(2:end)-2).^2+xsol(2:end).^2)...
 %                 -1./sqrt((ysol(2:end)-1).^2+(xsol(2:end)-2).^2) )) );
-            time = sum( sqrt((ysol(2:end)-ysol(1:end-1)).^2+(xsol(2:end)-xsol(1:end-1)).^2) ./ sqrt(E - ...
-                ( ysol(2:end) )) );
-%             time = sum( d ./ sqrt(E - ...
+%             time = sum( sqrt((ysol(2:end)-ysol(1:end-1)).^2+(xsol(2:end)-xsol(1:end-1)).^2) ./ sqrt(E - ...
+%                 ( (ysol(2:end)).^2 )) );
+%             time = sum( sqrt((ysol(2:end)-ysol(1:end-1)).^2+(xsol(2:end)-xsol(1:end-1)).^2) ./ sqrt(E - ...
 %                 ( (ysol(2:end)-0.5).^2 - xsol(2:end)...
-%                 + 1./sqrt((ysol(2:end)-0.5).^2+(xsol(2:end)-(xf-xi)/2).^2)...
-%                 - 1./sqrt((ysol(2:end)-0.5-0.18*2).^2+(xsol(2:end)-xf).^2) )) );
+%                 + .1./sqrt((ysol(2:end)-0.5).^2+(xsol(2:end)-(xf-xi)/2).^2)...
+%                 - .1./sqrt((ysol(2:end)-0.5-0.18*2).^2+(xsol(2:end)-xf).^2) )) );
+%             time = sum( sqrt((ysol(2:end)-ysol(1:end-1)).^2+(xsol(2:end)-xsol(1:end-1)).^2) ./ sqrt(E - ...
+%                 ( (ysol(2:end)-0.5).^2 - xsol(2:end) )) );
 %             time = sum( d ./ sqrt(E - ...
 %                 ( atan(ysol(2:end)./xsol(2:end)) )) );
+
+%             time = sum( sqrt((ysol(2:end)-ysol(1:end-1)).^2+(xsol(2:end)-xsol(1:end-1)).^2) ./ sqrt(E - ...
+%                 ( sin(xsol(2:end)*pi) + sin(ysol(2:end)*pi) )) );
+            time = sum( sqrt((ysol(2:end)-ysol(1:end-1)).^2+(xsol(2:end)-xsol(1:end-1)).^2) ./ sqrt(E - ...
+                ( sin((ysol(2:end)+0.5).*cos(pi*2*xsol(2:end))) )) );
+            
+
 
             if time < tBest && isreal(time)
                 xsolBest = xsol;
@@ -169,14 +193,31 @@ pt = interparc(1e3,xsol,ysol,'spline');
 xsol = pt(:,1);
 ysol = pt(:,2);
 %time = d/v, v=sqrt(E-U)
-% d = sqrt((ysol(2)-ysol(1))^2+(xsol(2)-xsol(1))^2); %interparc generates equidistant points
 tBestSpline = sum( sqrt((ysol(2:end)-ysol(1:end-1)).^2+(xsol(2:end)-xsol(1:end-1)).^2) ./ sqrt(E - ...
-    ( ysol(2:end) )) );
+    ( sin((ysol(2:end)+0.5).*cos(pi*2*xsol(2:end))) )) );
 xsolBestSpline = xsol;
 ysolBestSpline = ysol;
 
+close all
+plot(xsolBest, ysolBest, '.', 'color', [255 102 0]/255)
+xlim([0,1])
+ylim([0,1])
+xticks([])
+yticks([])
+fig = gcf;
+fig.PaperPosition = [0 1 4 4];
+print('trajectory','-dpng','-r500')
+close all
+plot(xsolBestSpline, ysolBestSpline, '.', 'color', [255 102 0]/255)
+xlim([0,1])
+ylim([0,1])
+xticks([])
+yticks([])
+fig = gcf;
+fig.PaperPosition = [0 1 4 4];
+print('trajectory-spline','-dpng','-r500')
+hold on
 plot(xsolBest, ysolBest, '.b')
-plot(xsolBestSpline, ysolBestSpline, '.g')
 plot([xi xf], [yi yf], 'ob')
 fcontour(U2, [0, 1, 0, 1])
 csvwrite('trajectory.csv',[xsolBest ysolBest])
