@@ -21,7 +21,7 @@ The instructions in this section will allow you to run the Brachi server on your
 2. If this is your first time running the server on your machine, type `python manage.py migrate` to configure the database. This command will not cause any problems if you have run the server before, so if in doubt just run it.
 3. Type `python manage.py runserver` to run the server. Open a web browser and go to `127.0.0.1:8000/navigation/title` in the address bar to start playing!
 
-*As a side note, the database is used to store user's times and usernames. If you ever want to reset the database, you can type `python manage.py flush`*
+*As a side note, the database is used to store user's times and usernames. If you ever want to reset the database, you can type* `python manage.py flush`.
 
 ### Running The Server on a Wi-Fi Node
 The instructions in this section will allow you to run the Brachi server for anyone on the same Wi-Fi node as your machine. This section is a bit more involved and you should be familiar with the previous subsection on running the server locally before attempting this. These steps may not work on every Wi-Fi node as your router may need to be configured appropriately. The method for configuring your router will not be described here. If you are unsure about the configuration of your router, give these steps a try to see if they just work (they often do).
