@@ -87,4 +87,3 @@ for f in functions:
 
 pl.show()
 
-print(glob.glob(os.getcwd()+"\\potentials-solutions\\level1*.csv")[0])
