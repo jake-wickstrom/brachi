@@ -8,24 +8,26 @@ warning off %ode15i generates many warnings
 %railing, and narrowing search focus accordingly.
 
 %IC angle range
-dydxStart = 2*pi*0;
-dydxEnd =   2*pi*1/2;
+dydxStart = 2*pi*3/4;
+dydxEnd =   2*pi*1;
 %IC angle resolution
 dydxInc = 2*pi/180;
 %IC scale range and resolution in powers of ten (too extreme causes problems)
-scales = 10.^linspace(-14,-6,17);
+scales = 10.^linspace(-14,-6,9*3+1);
 %interpolation settings
 interpRes = 1e3; %reduce if getting odd loops/zig-zags
 interpMode = 'linear'; %pchip is better, but much slower than linear
 %initial KE, setting exactly to 0 causes division by 0 in DEs
 Tinit = 1e-6;
 %start point
-xi = 0.05;
-yi = 0.95;
+xi = 0.5;
+yi = 0.7;
 %end point
 xf = 0.95;
-yf = 0.05;
+yf = 0.5;
 %NOTE: Avoid BCs that are vertical to each other as slope is used for curve fitting
+%for ode15i
+tf = 1e4;
 
 m = abs((yf-yi)/(xf-xi));
 fitLinex = [xi-1e0*(xf-xi) xi xi-1e0*(xf-xi) xi xi+1e0*(xf-xi) xi xi+1e0*(xf-xi)];
@@ -61,11 +63,11 @@ syms x(s) y(s) U(x, y) x2 y2
 % U = atan(y/x);
 % U2 = atan(y2/x2);
 
-% U = sin(x*pi) + sin(y*pi);
-% U2 = sin(x2*pi) + sin(y2*pi);
+U = sin(x*pi) + sin(y*pi);
+U2 = sin(x2*pi) + sin(y2*pi);
 
-U = sin((y+0.5)*cos(pi*2*x));
-U2 = sin((y2+0.5)*cos(pi*2*x2));
+% U = sin((y+0.5)*cos(pi*2*x));
+% U2 = sin((y2+0.5)*cos(pi*2*x2));
 
 % U = -0.03/sqrt(((y-0.5))^2+((x-(.95-.05)/2))^2) ...
 %     - 0.1/sqrt(((y-0.5-0.18*2))^2+((x-.95))^2) ...
@@ -109,7 +111,7 @@ for theta = dydxStart:dydxInc:dydxEnd
         sp0 = [dxi;dyi;0;0];
 
         %solve system and remove duplicate points
-        [~, sol] = ode15i(F, [t0, 1e6], s0, sp0);
+        [~, sol] = ode15i(F, [t0, tf], s0, sp0);
         [xsolRaw,ia,~] = unique(sol(:,1),'stable');
         if (numel(xsolRaw) < 2)
             continue
@@ -160,13 +162,11 @@ for theta = dydxStart:dydxInc:dydxEnd
 %             time = sum( d ./ sqrt(E - ...
 %                 ( atan(ysol(2:end)./xsol(2:end)) )) );
 
-%             time = sum( sqrt((ysol(2:end)-ysol(1:end-1)).^2+(xsol(2:end)-xsol(1:end-1)).^2) ./ sqrt(E - ...
-%                 ( sin(xsol(2:end)*pi) + sin(ysol(2:end)*pi) )) );
             time = sum( sqrt((ysol(2:end)-ysol(1:end-1)).^2+(xsol(2:end)-xsol(1:end-1)).^2) ./ sqrt(E - ...
-                ( sin((ysol(2:end)+0.5).*cos(pi*2*xsol(2:end))) )) );
+                ( sin(xsol(2:end)*pi) + sin(ysol(2:end)*pi) )) );
+%             time = sum( sqrt((ysol(2:end)-ysol(1:end-1)).^2+(xsol(2:end)-xsol(1:end-1)).^2) ./ sqrt(E - ...
+%                 ( sin((ysol(2:end)+0.5).*cos(pi*2*xsol(2:end))) )) );
             
-
-
             if time < tBest && isreal(time)
                 xsolBest = xsol;
                 ysolBest = ysol;
@@ -194,7 +194,7 @@ xsol = pt(:,1);
 ysol = pt(:,2);
 %time = d/v, v=sqrt(E-U)
 tBestSpline = sum( sqrt((ysol(2:end)-ysol(1:end-1)).^2+(xsol(2:end)-xsol(1:end-1)).^2) ./ sqrt(E - ...
-    ( sin((ysol(2:end)+0.5).*cos(pi*2*xsol(2:end))) )) );
+    ( sin(xsol(2:end)*pi) + sin(ysol(2:end)*pi) )) );
 xsolBestSpline = xsol;
 ysolBestSpline = ysol;
 
