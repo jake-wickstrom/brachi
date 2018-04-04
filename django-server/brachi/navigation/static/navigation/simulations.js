@@ -71,14 +71,17 @@ $(document).ready(function() {
   });
 
   document.getElementById("solnButton").addEventListener("click", function() {
-    document.getElementById('simCanvas').style.backgroundImage="url(" + CONTOUR_IMAGE_OPT + ")";
-    document.getElementById('opt-time').innerHTML = "Optimal Time: " + OPTIMAL_TIME + " seconds";
-    var dict = [];
-    dict.push({
-      key: "level",
-      value: level
-    });
-    post('play/solution/', dict)
+    var see = confirm("WARNING: Viewing the solution will\nnot allow you to submit any more\ntimes to the leaderboard for this level!");
+    if (see == true) {
+      document.getElementById('simCanvas').style.backgroundImage="url(" + CONTOUR_IMAGE_OPT + ")";
+      document.getElementById('opt-time').innerHTML = "Optimal Time: " + OPTIMAL_TIME + " seconds";
+      var dict = [];
+      dict.push({
+        key: "level",
+        value: level
+      });
+      post('play/solution/', dict)
+    }
   });
 
   document.getElementById("backButton").addEventListener("click", function() {
