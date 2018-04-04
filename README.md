@@ -21,13 +21,12 @@ The instructions in this section will allow you to run the Brachi server on your
 2. If this is your first time running the server on your machine, type `python manage.py migrate` to configure the database. This command will not cause any problems if you have run the server before, so if in doubt just run it.
 3. Type `python manage.py runserver` to run the server. Open a web browser and go to `127.0.0.1:8000/navigation/title` in the address bar to start playing!
 
-*As a side note, the database is used to store user's times and usernames. If you ever want to reset the database, you can type `python manage.py flush`*
+*As a side note, the database is used to store user's times and usernames. If you ever want to reset the database, you can type* `python manage.py flush`.
 
 ### Running The Server on a Wi-Fi Node
 The instructions in this section will allow you to run the Brachi server for anyone on the same Wi-Fi node as your machine. This section is a bit more involved and you should be familiar with the previous subsection on running the server locally before attempting this. These steps may not work on every Wi-Fi node as your router may need to be configured appropriately. The method for configuring your router will not be described here. If you are unsure about the configuration of your router, give these steps a try to see if they just work (they often do).
 
 1. Make sure that your machine is connected to the Wi-Fi node that you want to deploy the server to.
 2. Find the IPv4 address of the Wi-Fi node you are on and make note of it. You can generally find this information in the properties of your network connection (use Google for operating system specific instructions).
-3. Go to the `brachi/django-server/brachi/brachi` directory using a regular file browser. Open `settings.py` and find the `ALLOWED\_HOSTS` variable and add the IPv4 address of your router to the list (in quotations). It should now look something like: `$ALLOWED\_HOSTS =$ ['128.189.231.64']` but with the IPv4 address of your router instead. Save the changes you have made to the file.
-4. In a Command Line, PowerShell, or Terminal window, navigate to the `brachi/django-server/brachi` directory. Type `python manage.py runserver 0.0.0.0:8000` exactly as it is written to run the server on port 8000 on your machine.
-5. Anyone on the same Wi-Fi node as you (including yourself) can go to the following url in their web browsers to access the server: `128.189.231.64:8000/navigation/title`, (replacing the sample IPv4 address with the IPv4 address of your Wi-Fi node). Have fun!
+3. In a Command Line, PowerShell, or Terminal window, navigate to the `brachi/django-server/brachi` directory. Type `python manage.py runserver 0.0.0.0:8000` exactly as it is written to run the server on port 8000 on your machine.
+4. Anyone on the same Wi-Fi node as you (including yourself) can go to the following url in their web browsers to access the server: `128.189.231.64:8000/navigation/title`, (replacing the sample IPv4 address with the IPv4 address of your Wi-Fi node). Have fun!
