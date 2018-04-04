@@ -13,11 +13,15 @@
     function gotoLeaderboard() {
       window.location.assign("/navigation/leaderboard");
     }
+    function gotoProject() {
+      window.location.assign("/navigation/project");
+    }
   </script>
   <body>
     <ul class="nav">
       <header>Brachi</header>
       <li><a target="_blank" href="https://github.com/jake-wickstrom/brachi">GitHub</a></li>
+      <li><div onclick="gotoProject()">About</div></li>
       <li><div onclick="gotoLeaderboard()">Leaderboard</div></li>
       <li><div onclick="gotoLevelSelect()">Levels</div></li>
     </ul>
