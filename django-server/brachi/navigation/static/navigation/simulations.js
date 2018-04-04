@@ -72,7 +72,7 @@ $(document).ready(function() {
 
   document.getElementById("solnButton").addEventListener("click", function() {
     document.getElementById('simCanvas').style.backgroundImage="url(" + CONTOUR_IMAGE_OPT + ")";
-    document.getElementById('opt-time').innerHTML = "Optimal Time: " + OPTIMAL_TIME + " s";
+    document.getElementById('opt-time').innerHTML = "Optimal Time: " + OPTIMAL_TIME + " seconds";
     var dict = [];
     dict.push({
       key: "level",
@@ -298,7 +298,7 @@ function simulate(path) {
     t += dt;
   }
 
-  document.getElementById('info-display').innerHTML = "Your Time: " + t.toFixed(2) + " s";
+  document.getElementById('info-display').innerHTML = "Your Time: " + t.toFixed(2) + " seconds";
   // check if the time is valid then send it to the server
   if (!(isNaN(t) || t <= 0.0 || t >= 1000.0)) {
     var time_dict = [];

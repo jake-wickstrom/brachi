@@ -9,7 +9,7 @@ ALL_LEVELS = ['Brachistochrone',
               'Green Hill Zone',
               'Green Hill Zone 2']
 
-IDEAL_TIMES = [2.5453, 2.5573, 1.8867, 3.0256, 2.3710, 1.3230, 1.7754]
+IDEAL_TIMES = [2.5453, 2.5573, 1.8867, 3.0256, 2.3710, 1.2700, 1.7754]
 
 LEVEL_IMAGES = ['https://github.com/jake-wickstrom/brachi/blob/master/images/brachi.png?raw=true',
                 'https://github.com/jake-wickstrom/brachi/blob/master/images/brachi-2.png?raw=true',
