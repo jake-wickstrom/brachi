@@ -364,7 +364,7 @@ function filterPoints(xs, ys, x0, y0, xf, yf) {
 function getMouseLoc(event) {
   if (mouseDownFlag) {
     var x = event.x;
-    var y = event.y - $('#title-block').height();
+    var y = event.y - $('#title-block').height() + $(window).scrollTop();
     xpoints.push(x);
     ypoints.push(y);
     ctx.fillStyle = "red";
@@ -375,7 +375,7 @@ function getMouseLoc(event) {
 function mouseDown(event) {
   mouseDownFlag = true;
   var x = event.x;
-  var y = event.y - $('#title-block').height();
+  var y = event.y - $('#title-block').height() + $(window).scrollTop();
   xpoints.push(x);
   ypoints.push(y);
   ctx.fillStyle = "red";
