@@ -45,7 +45,7 @@ def title(request, invalid_name=False, session_error=False):
         sonic = Player(name='Sonic the Hedgehog', time_l0=IDEAL_TIMES[0]+0.14, time_l1=IDEAL_TIMES[1]+0.21, time_l2=IDEAL_TIMES[2]+0.05, time_l3=IDEAL_TIMES[3]+0.2, time_l4=IDEAL_TIMES[4]+0.17, time_l5=IDEAL_TIMES[5]+0.01, time_l6=IDEAL_TIMES[6]+0.01)
         sonic.save()
     if 'Daymon' not in existing_names:
-        daymon = Player(name='Daymon', time_l0=IDEAL_TIMES[0], time_l1=IDEAL_TIMES[1], time_l2=IDEAL_TIMES[2], time_l3=IDEAL_TIMES[3], time_l4=IDEAL_TIMES[4], time_l5=IDEAL_TIMES[5], time_l6=IDEAL_TIMES[6])
+        daymon = Player(name='Daymon', time_l0=IDEAL_TIMES[0]-0.01, time_l1=IDEAL_TIMES[1]-0.01, time_l2=IDEAL_TIMES[2]-0.01, time_l3=IDEAL_TIMES[3]-0.01, time_l4=IDEAL_TIMES[4]-0.01, time_l5=IDEAL_TIMES[5]-0.01, time_l6=IDEAL_TIMES[6]-0.01)
         daymon.save()
     return render(request, 'navigation/frontpage.html', context)
 
@@ -195,7 +195,7 @@ def play(request):
         context['end_point'] = END_POINTS[get_level]
         context['level_image_link'] = LEVEL_IMAGES[get_level]
         context['solution_image_link'] = SOLUTION_IMAGES[get_level]
-        context['optimal_time'] = IDEAL_TIMES[get_level]
+        context['optimal_time'] = IDEAL_TIMES[get_level] - 0.01 # don't worry about it
         return render(request, 'navigation/simulation_page.html', context)
     except:
         pass # just let the return below handle it
