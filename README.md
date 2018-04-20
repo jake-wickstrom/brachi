@@ -6,7 +6,7 @@ A web based application of a <a href="https://en.wikipedia.org/wiki/Brachistochr
 
 To allow for more complex curves to be drawn and to minmize errors in solving the equation numerically a parametric representaion of the input path was used in the Euler-Lagrange equation. However, this lead to a highly coupled, non-linear, second order differential equation with boundary values which, in most cases, is not possible to solve analytically. After significant research and experimentation the <a href="https://en.wikipedia.org/wiki/Shooting_method">shooting method</a> was used to solve the equation numerically.
 
-For more a more in depth mathmatical explanation of this process see `final_report.pdf` 
+For a more in depth mathmatical explanation of this process see `final_report.pdf` 
 
 ## Front End Physics Simulation
 The main interface in the application allows users to draw an arbitrary but continuous path within the main canvas. During this process the location of the mouse is recorded and a parametric cubic spline is interpolated along the input curve. This allows for a smooth curve in any direction to be input into the physics simulation. 
